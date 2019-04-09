@@ -1,0 +1,8 @@
+# Flip on/off PID controller
+bool flip
+# Send desired position and yaw regardless of controller state
+Vector3 dP_tb
+float64 dYaw
+---
+# Confirm state switched
+bool onoff

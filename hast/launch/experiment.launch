@@ -1,0 +1,89 @@
+<launch>
+	<arg name="launcher" 	default="experiment_launch" />
+	<arg name="flytime" 		default="10" />
+	<arg name="tb_base" 		default="kobuki" />
+	<arg name="ugv_n" 			default="ugv1" />
+	<arg name="wait" 				default="0" />
+	<arg name="phase" 			default="0" />
+	
+	<arg name="arc" 				default="false" />
+	<arg name="pull" 				default="false" />
+	<arg name="picket" 			default="false" />
+	<arg name="abcde" 			default="false" />
+	<arg name="step" 				default="false" />
+	<arg name="ugvfore" 		default="false" />
+	<arg name="ugvauto" 		default="false" />
+	<arg name="iflift" 			default="false" />
+	<arg name="aprillog" 		default="false" />
+	<arg name="ugvcomplex" 	default="false" />
+	<arg name="action" 			default="false" />
+	<arg name="local" 			default="false" />
+	<arg name="cmdtilt" 		default="false" />
+	<arg name="slamtest" 		default="false" />
+
+	<arg name="goal_topic" 	default="/$(arg ugv_n)/action/goal" />
+
+	<arg name="ugv_angularTime" 	default="1.00" />
+	<arg name="ugv_angularRate" 	default="0.175" /> <!-- 0.5 needed to overcome friction-->
+	<arg name="ugv_linearTime" 		default="5" />
+	<arg name="ugv_linearRate" 		default="0.2" />
+	<arg name="ugv_arcTime" 			default="3.5" />
+
+	<node pkg="hast" 	type="experiment"	name="experiment"	output="screen" >
+		<param name="arc_exp" 		value="$(arg arc)"/>
+		
+		<param name="abcde_exp"	 		value="$(arg abcde)"/>
+		<param name="aprillog" 			value="$(arg aprillog)"/>
+		<param name="cmdtilt" 			value="$(arg cmdtilt)"/>
+		<param name="iflift" 				value="$(arg iflift)"/>
+		<param name="local" 				value="$(arg local)"/>
+		<param name="pull_exp" 			value="$(arg pull)"/>
+		<param name="picket_exp" 		value="$(arg picket)"/>
+		<param name="step" 					value="$(arg step)"/>
+		<param name="ugvfore_exp" 	value="$(arg ugvfore)"/>
+		<param name="ugvAutopilot" 	value="$(arg ugvauto)"/>
+		<param name="slamtest"		 	value="$(arg slamtest)"/>
+		
+		<param name="ugvcomplex" 		value="$(arg ugvcomplex)"/>
+		
+		<param name="phase" 				value="$(arg phase)"	type="int"/>
+		<param name="flytime" 		value="$(arg flytime)" type="int"/> 	<!-- time (seconds) for uav to make and keep a waypoint-->
+
+		<param name="ugv_angularTime" value="$(arg ugv_angularTime)"/> 	<!-- time (sec) that ugv should turn-->
+		<param name="ugv_angularRate" value="$(arg ugv_angularRate)"/> 	<!-- rate (rad/sec?) that ugv should turn-->
+		<param name="ugv_linearTime" 	value="$(arg ugv_linearTime)"/> 	<!-- time (sec) that ugv should drive-->
+		<param name="ugv_linearRate" 	value="$(arg ugv_linearRate)"/> 	<!-- rate (m/sec?) that ugv should drive-->
+		<param name="ugv_arcTime" 		value="$(arg ugv_arcTime)"/> 	<!-- rate (m/sec?) that ugv should drive-->
+
+		<param name="drivestate_topic"				value="/$(arg ugv_n)/drivestate"	/>
+		<param name="ugvCmd_topic"						value="/$(arg ugv_n)/cmd_vel_raw"	/>
+		<param name="drive_service" 					value="/hast/service/$(arg ugv_n)/drive"	/>
+		<param name="pilot_service" 					value="/hast/service/$(arg ugv_n)/pilot"	/>
+		<param name="local_plan_topic" 				value="/move_base_$(arg ugv_n)_$(env HOST)/DWAPlannerROS/local_plan" />
+		<param name="global_plan_topic" 			value="/move_base_$(arg ugv_n)_$(env HOST)/DWAPlannerROS/global_plan" />
+		<param name="move_base_result_topic" 	value="/$(arg ugv_n)/move_base/result" />
+		<param name="UGV1ClearCostmap_topic" 	value="/move_base_$(arg ugv_n)_$(env HOST)/clear_costmaps" />
+		
+		<param name="ugvn_ckfstate_topic" 		value="/$(arg ugv_n)/ckf_state"	/>
+		<param name="ugvn_OdomSwitch_topic" 	value="/$(arg ugv_n)/service/stereo/OdomSwitch"	/>
+
+		<param name="ugv_goal_target_pose_header_frame_id" 	value="/$(arg ugv_n)/hast/base_footprint"	/>
+		
+
+		<param name="action_exp" 		value="$(arg action)"/>
+		<param name="start_wait" 		value="$(arg wait)"/>
+		<param name="UGVgoal_topic" value="$(arg goal_topic)"/>
+
+	</node>
+
+	<node pkg="hast" type="uav_n_cmd_switch.py" name="$(arg ugv_n)_cmd_remap_$(env HOST)"  >
+		<param name="/input_topic" 		value="/$(arg ugv_n)/uav/cmd_vel" />
+		<param name="/output_topic" 	value="/hast/uav/cmd_vel" />
+	</node>
+
+
+	<node pkg="hast"	type="killhast"					name="killhast_$(arg launcher)"					output="screen" required="true"/>
+	<node pkg="hast"	type="shutdownListener"	name="shutdownListener_$(arg launcher)"	output="screen"	required="true"/>
+	
+
+</launch>

@@ -1,0 +1,27 @@
+<launch>
+	<!-- Spawn tags from 20180619_021-->
+	<!-- ABCDE config of landmarks -->
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id07"/> 
+		<arg name="x"	value="-0.3407"/> 
+		<arg name="y"	value="-1.3451"/> 
+		<arg name="z"   value="0.0045"/> 
+		<arg name="Y"	value="-2.6482"/> 
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id02"/> 
+		<arg name="x"   value="-1.3079"/> 
+		<arg name="y"   value="-1.0081"/> 
+		<arg name="z"   value="0.2289"/> 
+		<arg name="Y"   value="-1.6008"/> 
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id03"/> 
+		<arg name="x"   value="-1.1425"/> 
+		<arg name="y"   value="-0.2096"/> 
+		<arg name="z"   value="0.2339"/> 
+		<arg name="Y"   value="-1.7345"/> 
+	</include>
+</launch>

@@ -1,0 +1,69 @@
+<launch>
+	<!-- Spawn tags from 20180430_001-->
+	<!-- move_base config of landmarks -->
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id02"/> 
+		<arg name="x"   value="0.144998"/> 
+		<arg name="y"   value="0.150841"/> 
+		<arg name="z"   value="0.414720"/> 
+		<arg name="Y"   value="-1.6983"/> 
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id03"/> 
+		<arg name="x"   value="-0.182351"/> 
+		<arg name="y"   value="-0.172667"/> 
+		<arg name="z"   value="0.418237"/> 
+		<arg name="Y"   value="2.3598"/> 
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id07"/> 
+		<arg name="x"	value="0.59904"/> 
+		<arg name="y"	value="-0.31031"/> 
+		<arg name="z"   value="-0.000416259"/> 
+		<arg name="Y"	value="-1.9291"/> 
+	</include>
+</launch>
+
+<!-- 
+Global Angle (Quaternion) april06:april06
+(use as id02)
+0.0109166
+0.00404163
+-0.750712
+0.660527
+
+0.144998
+0.150841
+0.414720
+yaw: -97.307 deg
+yaw: -1.6983 rad
+
+Global Angle (Quaternion) april03:april03
+0.00674514
+0.0113953
+0.924448
+0.381078
+
+-0.182351
+-0.172667
+0.418237
+yaw: 135.205 deg
+yaw: 2.3598 rad
+
+
+Global Angle (Quaternion) april07:april07
+0.000060924
+0.000184655
+-0.821803
+0.569772
+
+0.59904
+-0.31031
+-0.000416259
+yaw: -110.531 deg
+yaw: -1.9291 rad
+
+ -->

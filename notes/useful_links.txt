@@ -1,0 +1,23 @@
+http://kaiyuzheng.me/documents/navguide.pdf
+
+https://husarion.com/tutorials/ros-tutorials/8-unknown-environment-exploration/#8-unknown-environment-exploration-configuration-of-explore_server-node
+
+
+http://gazebosim.org/tutorials?tut=ros_gzplugins&cat=connect_ros
+
+http://gazebosim.org/tutorials/?tut=ros_urdf
+
+http://wiki.ros.org/urdf/XML/link
+
+
+
+
+gz sdf -p hast_kobuki_xacro.urdf
+
+
+rosrun xacro xacro.py -o hast_kobuki_xacro_out.urdf hast_kobuki_xacro.urdf
+
+rosrun xacro xacro hast_kobuki.urdf.xacro > hast_kobuki.urdf
+
+
+http://answers.gazebosim.org/question/8054/ros-plugin-sdf-empty-robotnamespace/

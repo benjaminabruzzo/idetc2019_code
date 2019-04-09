@@ -1,0 +1,51 @@
+<launch>
+	<!-- set params -->
+	<arg name="run" default="000" />
+	<arg name="date" default="20151009" />
+	<arg name="user" default="$(env USER)" />
+
+	<param name="/hast/run" value="$(arg run)" type = "str" />
+	<param name="/hast/date" value="$(arg date)" type = "str" />
+	<param name="/hast/user" value="$(env USER)" type = "str" />
+	<param name="/hast/kf/sim" value="true" type = "bool" />
+	<param name="/hast/stereo/SaveImages" value="false" type = "bool" />
+
+	<!-- run bag -->
+	<param name="use_sim_time" value="true" />
+	<arg name="bagpath" default="/home/$(arg user)/ros/data/$(arg date)/$(arg run)" />
+	<param name="/hast/bagpath" value="$(arg bagpath)/bag_$(arg run).bag/"/>
+	<node pkg="rosbag" type="play" name="rosbag_play" args="$(arg bagpath)/bag_$(arg run).bag --clock" required="true"/>
+
+	<!-- save rebag -->
+	<arg name="rebagpath" default="/home/$(arg user)/ros/data/$(arg date)/$(arg run)/rebag_april_$(arg run)" />
+	<param name="/hast/rebagpath" value="$(arg rebagpath)"/>
+	<node pkg="rosbag" type="record" name="rosbag_record" args="-O $(arg rebagpath)
+		/hast/shutdown 
+		/hast/stereo/pose 
+		/tag_detections 
+		/ardrone/navdata 
+		/ardrone/cmd_vel 
+		/hast/stereo/markerCloudCAM
+		/hast/stereo/markerCloudUGV
+		/hast/kobuki/odom
+		" />
+		<!-- Do not include /hast/ugv/state or /hast/uav/state-->
+
+
+
+
+
+</launch>
+
+
+
+<!--
+ * /hast/kobuki/cmd_vel [geometry_msgs/Twist]
+ * /ardrone/navdata [unknown type]
+ * /tf [tf2_msgs/TFMessage]
+ * /tf_static [unknown type]
+ * /hast/shutdown [hast/flag]
+ * /ardrone/cmd_vel [geometry_msgs/Twist]
+ * /kobuki/odom [unknown type]
+ * /hast/stereo/pose [hast/uavstate]
+-->

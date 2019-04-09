@@ -1,0 +1,22 @@
+<launch>
+	<arg name="launcher" 	default="trigger_launcher" />
+	<node pkg="hast"	type="shutdownListener"	name="shutdownListener_$(arg launcher)"	output="screen"	required="true"/>
+	<node pkg="hast"	type="triggerSaveRaw"	name="triggerSaveRaw"	output="screen"	required="true"/>
+
+  <node pkg="image_view" type="image_view" name="image_view_right" >
+    <remap from="image" to="/pgrstereo/left/image_raw" />
+  </node>
+
+  <node pkg="image_view" type="image_view" name="image_view_left" >
+    <remap from="image" to="/pgrstereo/right/image_raw" />
+  </node>
+
+
+</launch>
+
+
+<!-- rostopic pub -r 10 /tb/cmd_vel geometry_msgs/Twist  '{linear:  {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0,y: 0.0,z: 0.0}}' -->
+<!-- rostopic pub -1 /hast/shutdown hast/flag '{flag: {False}}' -->
+
+<!-- rostopic pub -1 /hast/ugv/goal geometry_msgs/Pose2D '{x: 2.0, y: 0.0, theta: 0.125}' -->
+

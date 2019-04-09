@@ -1,0 +1,9 @@
+<launch>
+
+	<include file="$(find turtlebot_navigation)/launch/includes/velocity_smoother.launch.xml">
+		<param name="raw_cmd_vel" 		value="/hast/kobuki/cmd_vel"/>
+		<!-- <param name="raw_cmd_vel" 		value="/hast/kobuki/cmd_vel"/> -->
+		<!-- There probably is a second topic that should be here...  -->
+	</include>
+
+</launch>

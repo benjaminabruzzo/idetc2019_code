@@ -1,0 +1,70 @@
+<launch>
+	<arg name="model" 				default="$(find robot_descriptions)/UGV2/urdf/hast_kobuki_stereo.urdf.xacro"/>
+	<arg name="tb_base"				default="kobuki" />
+	<arg name="robot_ns" 			default="ugv"/>
+	<arg name="move_base_ns" 		default="ugv"/>
+	<arg name="ugv_description" 	default="$(arg robot_ns)/robot_description"/>
+	<arg name="camera_namespace" 	default="pgrstereo" />
+	<arg name="raw_wheel_cmd_topic" default="$(arg tb_base)/cmd_vel_raw" />
+	<arg name="cost_scaling_factor" default="7" />
+	<arg name="x" default="0"/>
+	<arg name="y" default="0"/>
+	<arg name="z" default="0"/>
+	<arg name="R" default="0"/>
+	<arg name="P" default="0"/>
+	<arg name="Y" default="0"/>
+
+		<!-- send the robot XML to param server -->
+	<param command="$(find xacro)/xacro '$(arg model)' --inorder" name="$(arg ugv_description)"/>
+
+	<!-- push ugv_description to factory and spawn robot in gazebo -->
+	<group>
+		<param name="tf_prefix" value="gazebo/kobuki" />
+		<node name="spawn_ugv" pkg="gazebo_ros" type="spawn_model"
+					args="-param $(arg ugv_description) -urdf
+								-x '$(arg x)' -y '$(arg y)' -z '$(arg z)'
+								-R '$(arg R)' -P '$(arg P)' -Y '$(arg Y)'
+								-model hast_kobuki" respawn="false" output="screen"/>
+
+	<!-- start robot state publisher -->
+		<node name="ugv_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+			<remap from="/joint_states" to="$(arg robot_ns)/joint_states" />
+			<remap from="robot_description" to="$(arg ugv_description)" />
+		</node>
+
+	</group>
+	<!-- move base -->
+		<include file="$(find hast)/launch/kobuki/kobuki_move_base.launch">
+			<arg name="dwa_params" 			value="gazebo"/> 
+			<arg name="raw_command_topic"	value="$(arg raw_wheel_cmd_topic)" />
+			<arg name="kobuki_odom_topic" 	value="gazebo/$(arg move_base_ns)/odom"/> 
+		</include>
+		
+	<!-- map and action server -->
+		<node name="map_server" pkg="map_server" type="map_server" args="$(find hast)/maps/square300x300.yaml"/>
+		
+		<node ns="kobuki" pkg="tf" type="static_transform_publisher" name="tf_map2odom" args="0 0 0 0 0 0 /$(arg move_base_ns)/map /$(arg move_base_ns)/odom 100"/> 
+		<node ns="kobuki" pkg="tf" type="static_transform_publisher" name="tf_map2gazebo" args="0 0 0 0 0 0 /$(arg move_base_ns)/map /gazebo/$(arg move_base_ns)/odom 100"/> 
+		
+		<node	pkg="hast" 	type="ugvAction"	name="ugvAction"	output="screen">
+			<param name="map"					value="map"	/>
+			<param name="kill_topic"			value="/hast/shutdown"	/>
+			<param name="ugv_goaltopic"			value="/$(arg move_base_ns)/goal"	/>
+			<param name="s_move_base_namespace"	value="/$(arg move_base_ns)/move_base"	/>
+		</node>
+
+	<!--  camera rectifying  -->
+		<group ns="/hast/stereo" >
+			<rosparam file="$(find robot_descriptions)/UGV2/config/gazebo_pgr_params.yaml" command="load"/>
+		</group>
+		<group ns="$(arg camera_namespace)" >
+			<group ns="left" >
+				<node pkg="image_proc" type="image_proc" name="image_proc" />
+			</group>
+			<group ns="right" >
+				<node pkg="image_proc" type="image_proc" name="image_proc" />
+			</group>
+		</group>
+
+</launch>
+

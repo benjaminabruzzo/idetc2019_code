@@ -1,0 +1,18 @@
+It is possible using a weird hack.
+
+In the package.xml of the package where you want to load the model (or just any package that gets loaded before your models are needed), declare the following export:
+
+<export>
+    <!-- gazebo_ros_paths_plugin automatically adds these to
+        GAZEBO_PLUGIN_PATH and GAZEBO_MODEL_PATH when you do this export inside
+        the package.xml file. You can than use URIs of type model://my_package/stuff. -->
+    <gazebo_ros                                                                 
+        gazebo_plugin_path="${prefix}/lib"
+        gazebo_model_path="${prefix}/.." /> 
+</export>
+
+After doing this and loading the package (running a node from it? don' know exactly), you're allowed to specify things like <uri>model://my_package/models/foo.dae</uri>.
+
+The ${prefix}/.. means to add the parent of your package directory to the model path, which should usually be the workspace itself. So then you can reference all packages from that workspace. If you need models from a different workspace, I think you have to declare the export in all needed workspaces somewhere.
+
+I've learnt this knowledge from http://answers.gazebosim.org/question/6416/usingaurdfingazebo-package-uris-not-described/?answer=6419#post-id-6419 .

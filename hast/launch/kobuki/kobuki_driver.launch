@@ -1,0 +1,120 @@
+<launch>
+	<arg name="ugv_n" 					default="ugv1" />
+	<arg name="tb_base" 				default="kobuki" />
+	<arg name="speed_lim_v" 			default="0.4" />
+	<arg name="speed_lim_w" 			default="0.25" />
+	<arg name="use_kobuki_imu" 			default="true" />
+	<arg name="kobuki_publish_tf" 		default="true"/> <!-- Publish base_footprint - odom transforms (usually good thing to have for localisation) -->
+	<arg name="raw_wheel_cmd_topic" 	default="$(arg ugv_n)/cmd_vel_raw"/> 
+	<arg name="limited_wheel_cmd_topic" default="$(arg ugv_n)/cmd_vel_limited"/> 
+
+	<arg name="odom_frame"				default="/$(arg ugv_n)/hast/odom"/>
+	<arg name="base_frame"				default="/$(arg ugv_n)/hast/base_footprint"/>
+	<arg name="raw_cmd_vel_topic"		default="raw_cmd_vel"/>
+	<arg name="smooth_cmd_vel_topic"	default="smooth_cmd_vel"/>
+	<arg name="robot_cmd_vel_topic"		default="robot_cmd_vel"/>
+
+	
+	<arg name="global_path_topic" 	default="/move_base/TrajectoryPlannerROS/global_plan" />
+
+	<group ns="hast" >
+		<node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>
+
+		<node pkg="nodelet" type="nodelet" name="$(arg tb_base)" args="load kobuki_node/KobukiNodelet mobile_base_nodelet_manager">
+			<rosparam file="$(find hast)/config/$(arg tb_base)/$(arg tb_base)_driver.yaml" command="load"/>
+			<param name="odom_frame" 						value="$(arg odom_frame)"/>
+			<param name="base_frame" 						value="$(arg base_frame)"/>
+			<param name="use_imu_heading" 					value="$(arg use_kobuki_imu)"/>
+			<param name="publish_tf" 						value="$(arg kobuki_publish_tf)"/>
+			<remap from="mobile_base/joint_states" 			to="joint_states"/>
+			<remap from="$(arg tb_base)/commands/velocity" 	to="$(arg raw_wheel_cmd_topic)"/>
+		</node>
+
+		<node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" >
+			<rosparam command="load" file="$(find kobuki_node)/param/diagnostics.yaml" />
+		</node>
+
+
+<!-- 		<node pkg="hast" type="logger.py" name="hast_cmd_vel_limiter">
+			<param name="/cmd_vel_sub_topic" value="$(arg raw_wheel_cmd_topic)" />
+			<param name="/cmd_vel_pub_topic" value="$(arg raw_wheel_cmd_topic)_limited"/>
+			<param name="/cmd_vel_x_limit" value="$(arg speed_lim_v)"/>
+			<param name="/cmd_vel_w_limit" value="$(arg speed_lim_w)"/>
+			<param name="/global_path_topic" value="$(arg global_path_topic)" />
+		</node>
+ -->
+
+<!-- 		<group ns="yocs" >
+			<node pkg="nodelet" type="nodelet" name="velocity_smoother" args="load yocs_velocity_smoother/VelocitySmootherNodelet mobile_base_nodelet_manager">
+				<rosparam file="$(find hast)/config/$(arg tb_base)/$(arg tb_base)_smoother.yaml" command="load"/>
+				<remap from="$(arg tb_base)/raw_cmd_vel"    to="yocs/$(arg raw_cmd_vel_topic)"/>
+				<remap from="$(arg tb_base)/smooth_cmd_vel" to="yocs/$(arg smooth_cmd_vel_topic)"/>
+				<remap from="$(arg tb_base)/robot_cmd_vel"  to="yocs/$(arg robot_cmd_vel_topic)"/>
+				<remap from="$(arg tb_base)/odometry"       to="yocs/$(arg odom_topic)"/>
+			</node>
+
+			<node pkg="nodelet" type="nodelet" name="mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager">
+				<param name="yaml_cfg_file" value="$(find hast)/config/$(arg tb_base)/$(arg tb_base)_cmd_vel_mux.yaml"/>
+			</node>
+		</group>
+ -->
+<!--	
+		<arg name="urdf_file" default="$(find xacro)/xacro.py '$(find kobuki_description)/urdf/kobuki_standalone.urdf.xacro'" />
+		<param name="robot_description" command="$(arg urdf_file)" />
+		<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+			<param name="publish_frequency" type="double" value="30.0" />
+		</node>
+-->
+	</group>
+
+
+
+
+
+</launch>
+
+<!-- 
+
+/navigation_velocity_smoother/speed_lim_v
+/navigation_velocity_smoother/speed_lim_w
+/move_base/TrajectoryPlannerROS/max_vel_theta
+/move_base/TrajectoryPlannerROS/max_vel_x
+
+
+ -->
+
+
+<!-- <launch>
+	<node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>
+	<node pkg="nodelet" type="nodelet" name="mobile_base" args="load kobuki_node/KobukiNodelet mobile_base_nodelet_manager">
+		<rosparam file="$(find kobuki_node)/param/base.yaml" command="load"/>
+		<remap from="mobile_base/odom" to="odom"/>
+		<remap from="mobile_base/joint_states" to="joint_states"/>
+		<remap from="/mobile_base/commands/velocity" to="tb/cmd_vel"/>
+	</node>
+	
+	<node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" >
+		<rosparam command="load" file="$(find kobuki_node)/param/diagnostics.yaml" />
+	</node>
+</launch> -->
+
+
+<!-- ############ Standalone launcher for running a create turtlebot	
+	<group ns="tb" >
+		<node name="ros_create_driver" pkg="irobot_create_2_1" type="driver.py" />
+	</group>
+
+	<node name="ros_create_driver" pkg="irobot_create_2_1" type="driver.py" >
+		<remap from="cmd_vel" to="tb/cmd_vel"/>
+	</node>
+
+############ Standalone launcher for running a default Kobuki
+ -->
+
+
+
+
+<!-- rosrun irobot_create_2_1 driver.py cmd_vel:=/tb/cmd_vel odom=:/tb/odom -->
+
+
+

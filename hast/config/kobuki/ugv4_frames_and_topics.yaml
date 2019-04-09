@@ -1,0 +1,25 @@
+# From kobuki_driver.yaml
+odom_frame: ugv4/odom            # Name of the odometry TF frame (string, default: odom)
+base_frame: ugv4/base_footprint  # Name of the base TF frame  (string, default: base_footprint)
+DWAPlannerROS:
+  global_frame_id: ugv4/odom
+
+local_costmap:
+   global_frame:      /ugv4/odom
+   robot_base_frame:  /ugv4/base_footprint
+   obstacle_layer:
+    april:
+      sensor_frame: /map
+      topic:        /ugv4/april/PointCloud2
+
+global_costmap:
+   global_frame:      /map
+   robot_base_frame:  /ugv4/base_footprint
+   obstacle_layer:
+    april:
+      sensor_frame: /map
+      topic:        /ugv4/april/PointCloud2
+
+
+base_local_planner: "dwa_local_planner/DWAPlannerROS"
+base_global_planner: "navfn/NavfnROS"

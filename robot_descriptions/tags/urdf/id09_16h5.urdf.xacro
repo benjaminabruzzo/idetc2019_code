@@ -1,0 +1,73 @@
+<robot name="id07_16h5" xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<xacro:property name="X_PI" value="3.1415926535897931" />
+	<xacro:property name="X_id" value="id09_16h5" />
+	<link name="${X_id}/base_footprint"/>
+	<joint name="base_joint" type="fixed">
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<parent link="${X_id}/base_footprint"/>
+		<child link="${X_id}/base_link" />
+	</joint>
+	<joint name="fill_joint" type="fixed">
+		<origin xyz="0 0 ${0.06*0.0254}" rpy="0 0 0" />
+		<parent link="${X_id}/base_link"/>
+		<child link="${X_id}/fill_link" />
+	</joint>
+
+	<link name="${X_id}/base_link">
+		<visual>
+			<geometry>
+				<mesh filename="package://robot_descriptions/tags/dae/${X_id}_white.dae" />
+			</geometry>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="white"/>
+		</visual>
+		<collision>
+			<geometry>
+				<box size="${8*0.0254} ${8*0.0254} 0.001"/>
+			</geometry>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+		</collision>
+		<inertial>
+			<mass value="1"/> <!-- 2.4/2.6 kg for small/big battery pack -->
+			<origin xyz="0 0 0"/>
+			<inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
+		</inertial>
+	</link>
+
+	<link name="${X_id}/fill_link">
+		<visual>
+			<geometry>
+				<mesh filename="package://robot_descriptions/tags/dae/${X_id}_black.dae" />
+			</geometry>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="black"/>
+		</visual>
+		<collision>
+			<geometry>
+				<box size="${6*0.0254} ${6*0.0254} 0.001"/>
+			</geometry>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+		</collision>
+		<inertial>
+			<mass value="1"/> <!-- 2.4/2.6 kg for small/big battery pack -->
+			<origin xyz="0 0 0"/>
+			<inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
+		</inertial>
+	</link>
+
+	<gazebo reference="${X_id}/base_link">
+		<material>Gazebo/White</material>
+	</gazebo>
+	<gazebo reference="${X_id}/fill_link">
+		<material>Gazebo/Black</material>
+	</gazebo>
+	<material name="black">
+		<color rgba="0 0 0 1"/>
+	</material>
+	<material name="white">
+		<color rgba="1 1 1 1"/>
+	</material>
+
+</robot>
+

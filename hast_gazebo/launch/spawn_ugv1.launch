@@ -1,0 +1,24 @@
+<launch>
+	<!-- common nodes/params -->
+	<node name="map_server_$(env HOST)" pkg="map_server" type="map_server" args="$(find hast)/maps/square300x300.yaml"/>
+
+	<!-- ugv1 -->
+	<arg name="ugv1_ns"		default="ugv1"/>
+	<arg name="map_x"   default="-1.98563"/> 
+	<arg name="map_y"   default="0.567369"/> 
+	<arg name="map_z"   default="0.00548164"/> 
+	<arg name="map_Y"   default="-0.2486"/> 
+	<include file="$(find robot_descriptions)/UGV_n/launch/spawn_ugv.launch">
+		<arg name="ugv_ns" 				value="$(arg ugv1_ns)" />
+		<arg name="move_base_ns" 		value="$(arg ugv1_ns)" />
+		<arg name="raw_wheel_cmd_topic" value="$(arg ugv1_ns)/cmd_vel_raw" />
+		
+		<arg name="x"	value="$(arg map_x)"/>
+		<arg name="y"	value="$(arg map_y)"/>
+		<arg name="z"   value="$(arg map_z)"/>
+		<arg name="R" 	value="0"/>
+		<arg name="P" 	value="0"/>
+		<arg name="Y"	value="$(arg map_Y)"/>
+	</include>
+
+</launch>

@@ -1,0 +1,80 @@
+<launch>
+	<arg name="config" 				default="$(find robot_descriptions)/UGV_n/urdf/hast_ugvn_kobuki_stereo.urdf.xacro"/> 
+	<arg name="test"   				default="false"/>	
+	<arg name="ugv_ns" 				default="ugv"/>
+	<arg name="move_base_ns" 		default="ugv"/>
+	<arg name="ugv_description" 	default="$(arg ugv_ns)/robot_description"/>
+	<arg name="camera_namespace" 	default="pgrstereo" />
+	<arg name="raw_wheel_cmd_topic" default="cmd_vel_raw" />
+	<arg name="cost_scaling_factor" default="7" />
+
+	<arg name="left_tf_id" 			default="$(arg ugv_ns)/hast/stereo_left" />
+	<arg name="right_tf_id" 		default="$(arg ugv_ns)/hast/stereo_right" />
+	<arg name="ugv_base_footprint" 	default="$(arg ugv_ns)/hast/base_footprint" />
+	<arg name="ugv_stereo_center" 	default="$(arg ugv_ns)/hast/stereo_center" />
+
+	<arg name="x" default="0"/>
+	<arg name="y" default="0"/>
+	<arg name="z" default="0"/>
+	<arg name="R" default="0"/>
+	<arg name="P" default="0"/>
+	<arg name="Y" default="0"/>
+
+	<!-- load ugv_description-->
+	<include file="$(find robot_descriptions)/UGV_n/launch/ugvn_description.launch">
+		<arg name="ugv_ns" value="$(arg ugv_ns)"/> 
+		<arg name="config" value="$(arg config)"/> 
+	</include>
+	
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="tf_map_2_$(arg ugv_ns)_map" 
+		args="0 0 0 0 0 0 /map /$(arg ugv_ns)/map 100"/> 
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="tf_map_2_gazebo_$(arg ugv_ns)_odom" 
+		args="$(arg x) $(arg y) $(arg z) $(arg Y) $(arg P) $(arg R)  /map gazebo/$(arg ugv_ns)/odom 100"/> 
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="tf_map2odom" 		
+		args="$(arg x) $(arg y) $(arg z) $(arg Y) $(arg P) $(arg R) /$(arg ugv_ns)/map $(arg ugv_ns)/hast/odom 100"/> 
+
+	<!-- spawn in gazebo	 -->
+	<node name="$(arg ugv_ns)_spawn_$(env HOST)" pkg="gazebo_ros" type="spawn_model"
+				args="-param $(arg ugv_description) -urdf
+							-x '$(arg x)' -y '$(arg y)' -z '$(arg z)'
+							-R '$(arg R)' -P '$(arg P)' -Y '$(arg Y)'
+							-model hast_$(arg ugv_ns)" respawn="false" output="screen"/>
+
+	<!-- move base -->
+	<include file="$(find hast)/launch/kobuki/kobuki_move_base.launch">
+		<arg name="ugv_ns" 				value="$(arg ugv_ns)"/> 
+		<arg name="goal_topic" 			value="$(arg ugv_ns)/goal" />
+		<arg name="dwa_params" 			value="gazebo"/> 
+		<arg name="raw_command_topic"	value="$(arg raw_wheel_cmd_topic)" />
+		<arg name="kobuki_odom_topic" 	value="$(arg ugv_ns)/gazebo/odom"/> 
+	</include>
+
+	<!-- action server -->
+	<node	ns="$(arg ugv_ns)"	pkg="hast" 	type="ugvAction"	name="$(arg ugv_ns)_Action_$(env HOST)"	output="screen">
+		<param name="map"					value="map"	/>
+		<param name="kill_topic"			value="/hast/shutdown"	/>
+		<param name="ugv_goaltopic"			value="action/goal"	/>
+		<param name="s_move_base_namespace"	value="/$(arg move_base_ns)/move_base"	/>
+	</node>
+
+	<!--  camera rectifying  -->
+	<group ns="/$(arg ugv_ns)/stereo" >
+		<rosparam file="$(find robot_descriptions)/UGV_n/config/$(arg ugv_ns)_pgr_params.yaml" command="load"/>
+	</group>
+	<group ns="$(arg ugv_ns)/$(arg camera_namespace)" >
+		<group ns="left" >
+			<node pkg="image_proc" type="image_proc" name="$(arg ugv_ns)_left_image_proc_$(env HOST)" />
+		</group>
+		<group ns="right" >
+			<node pkg="image_proc" type="image_proc" name="$(arg ugv_ns)_right_image_proc_$(env HOST)" />
+		</group>
+	</group>
+
+	<!--  set static tfs  -->
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="stereo_center_$(env HOST)" args="0.005240 0.000000 0.233270 -1.57079632679 0 -1.22173047640 /$(arg ugv_base_footprint) /$(arg ugv_stereo_center) 100"/> 
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="stereo_left_$(env HOST)" 	 args="-0.072052165 0 0 0 0 0 /$(arg ugv_stereo_center) $(arg left_tf_id) 100"/> 
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="stereo_right_$(env HOST)"	 args=" 0.072052165 0 0 0 0 0 /$(arg ugv_stereo_center) $(arg right_tf_id) 100"/> 
+
+
+</launch>
+

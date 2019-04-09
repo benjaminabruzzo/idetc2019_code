@@ -1,0 +1,46 @@
+<!-- -*- mode: XML -*- -->
+<launch>
+  <!-- <arg name="tb_base"   default="kobuki" /> -->
+  <!-- <arg name="image"     default="image_rect" /> -->
+  <arg name="image"     default="image_raw" />
+  <arg name="tag_size"  default="0.152" />
+  <arg name="tf_x_offset"  default="0.025" />
+  
+  <!-- Swap front to bottom camera -->
+  <node pkg="rosservice" type="rosservice" name="togglecam" args="call /ardrone/togglecam"/>
+  
+  <!-- run image processing node to rectify images -->
+  <node ns="ardrone/bottom" pkg="image_proc" type="image_proc" name="image_proc">
+    <remap from="image_raw" to="/ardrone/bottom/image_raw" />
+    <remap from="camera_info" to="/ardrone/bottom/camera_info" />
+  </node>
+
+  <!-- run the april tag detection node -->
+  <group ns="ardrone">
+    <node pkg="apriltags_ros" type="apriltag_detector_node" name="apriltag_detector" output="screen">
+      <!-- Remap topic required by the node to custom topics -->
+      <!-- <remap from="image_rect" to="/ardrone/bottom/image_raw" /> -->
+      <remap from="image_rect" to="/ardrone/bottom/$(arg image)" />
+      <remap from="camera_info" to="/ardrone/bottom/camera_info" />
+      <param name="sensor_frame_id" value="/hast/uav/base_bottomcam" />
+      <!-- <param name="sensor_frame_id" value="/ardrone2/bottomcam" /> -->
+
+      <!-- Set the tag family: 16h5, 25h7, 25h9, 36h9, or 36h11(default) -->
+      <param name="tag_family" type="str" value="16h5" />
+
+      <!-- Describe the tags (in meters?)-->
+      <rosparam command="load" file="$(find hast)/config/april/april_dictionary.yaml" />
+      
+    </node>
+  </group>
+  <node ns="ardrone2" pkg="tf" type="static_transform_publisher" name="tf_uav_base2bottomcam" args="$(arg tf_x_offset) 0 0 1.57079632679 3.14159265359 0 /hast/uav/ardrone_base_link /hast/uav/base_bottomcam 100"/> 
+
+   
+  <node pkg="image_view" type="image_view" name="image_view" >
+    <remap from="image" to="/ardrone/tag_detections_image" />
+  </node>
+  
+  
+</launch>
+
+

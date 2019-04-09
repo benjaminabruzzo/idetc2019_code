@@ -1,0 +1,52 @@
+<launch>
+    <!-- set params -->
+	<arg name="sim" default="true" />
+
+	<arg name="launcher" 	default="repub_launch" />
+	<!-- Experiment parameters and identifiers -->
+	<arg name="april_debug" default="false" />
+	<arg name="run" 		default="021" />
+	<arg name="date" 		default="17180201" />
+	<arg name="tb_base" 	default="kobuki" />
+	<arg name="saveraw" 	default="false" />
+	<arg name="showcircles" default="false" />
+	<arg name="user" 		default="$(env USER)" />
+	<arg name="saveimages" 	default="false" />
+
+	<!-- Experiment index parameters -->
+	<param name="/hast/run" value="$(arg run)" type = "str" />
+	<param name="/hast/date" value="$(arg date)" type = "str" />
+	<param name="/hast/user" value="$(arg user)" type = "str" />
+
+	<param name="/hast/stereo/SaveImages" value="$(arg saveimages)" type = "bool" />
+	<param name="/hast/kf/sim" value="$(arg sim)" type = "bool" />
+	<param name="/hast/april/debug" value="$(arg april_debug)" type = "bool" />
+
+	<!-- Start hast nodes-->
+	<param name="/hast/kf/sim" value="true" type = "bool" />
+
+	<node 	pkg="hast" 	type="rawImagePub"	name="rawImagePub"	output="screen" 	required="true">
+		<param name="image_src_path" 		value="/home/benjamin/ros/data/$(arg date)/$(arg run)" />
+		<param name="left_topic" 			value="/pgrstereo/left/image_raw" />
+		<param name="right_topic" 			value="/pgrstereo/right/image_raw" />
+		<param name="left_info_topic" 		value="/pgrstereo/left/camera_info" />
+		<param name="right_info_topic" 		value="/pgrstereo/right/camera_info" />
+		<param name="left_image_frame_id" 	value="left" />
+		<param name="right_image_frame_id" 	value="right" />
+	</node>
+
+	<node ns="/pgrstereo/right" pkg="image_proc" type="image_proc" name="image_proc" required="true"/>
+	<node ns="/pgrstereo/left" pkg="image_proc" type="image_proc" name="image_proc" required="true"/>
+
+	<node pkg="hast"	type="killhast"			name="killhast_$(arg launcher)"			output="screen" required="true"/>
+
+	<include file="$(find hast)/launch/hast_stereo_obs.launch">
+		<arg name="tb_base" 		value="$(arg tb_base)"/>
+		<arg name="roi_halfwindow" 	value="100" />
+		<arg name="saveraw" 		value="$(arg saveraw)"/>
+		<arg name="showcircles" 	value="$(arg showcircles)"/>
+	</include>
+
+
+</launch>
+

@@ -1,0 +1,26 @@
+<!--
+Spawns Kobuki inside a Gazebo simulation
+-->
+<launch>
+
+	<group ns="ugv2">
+		<param name="tf_prefix" value="gazebo/kobuki" />
+		<arg name="robot_name" default="ugv2"/>
+		<param name="robot_description"	command="$(find xacro)/xacro.py '$(find robot_descriptions)/UGV2/urdf/hast_ugv2_kobuki_stereo.urdf.xacro'"/>	
+		<node 
+			pkg="gazebo_ros" 
+			type="spawn_model" 
+			name="spawn_$(arg robot_name)"
+			args="-x 0.0 -y 0.0 -z 0.1 -unpause -urdf -param robot_description -model $(arg robot_name)" 
+			respawn="false"
+			output="screen">
+		</node>
+
+
+		<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"  output="screen">
+			<param name="publish_frequency" type="double" value="30.0" />
+		</node>
+
+		<node pkg="nodelet" type="nodelet" name="$(arg robot_name)_nodelet_manager" args="manager"/>
+	</group>
+</launch>

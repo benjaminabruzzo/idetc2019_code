@@ -1,0 +1,333 @@
+<!-- -*- mode: XML -*-  -->
+
+<!-- roslaunch hast sim.launch run:=007 user:=benjamin -->
+
+<launch>
+	<!-- Experiment parameters and identifiers -->
+	<arg name="trial" 	default="000" />
+	<arg name="date" 	default="20160930" />
+	<arg name="user" 	default="$(env USER)" />
+	<arg name="tb_base" default="kobuki" />
+
+	<arg name="bagpath" default="/home/$(arg user)/ros/data/$(arg date)/$(arg trial)/bag_$(arg trial)" />
+
+	<node pkg="rosbag" type="record" name="rosbag_hast" args="-O $(arg bagpath) 
+/hast/uav/cmd_vel
+/hast/ugv/cmd_vel
+/ardrone/bottom/camera_info 
+/ardrone/camera_info 
+/ardrone/cmd_vel 
+/ardrone/imu 
+/ardrone/land 
+/ardrone/mag 
+/ardrone/navdata 
+/ardrone/odometry 
+/ardrone/reset 
+/ardrone/takeoff 
+/battery/capacity 
+/battery/charge 
+/battery/charge_ratio 
+/battery/current 
+/battery/temperature 
+/battery/voltage 
+/diagnostics_agg 
+/diagnostics_toplevel_state 
+/hast/april/PointCloud2 
+/hast/goal/PointCloud2
+/hast/kobuki/cmd_vel
+/hast/kobuki/cmd_vel_limited
+/hast/kobuki/cmd_vel_raw
+/hast/kobuki/commands/controller_info
+/hast/kobuki/commands/digital_output
+/hast/kobuki/commands/external_power
+/hast/kobuki/commands/led1
+/hast/kobuki/commands/led2
+/hast/kobuki/commands/motor_power
+/hast/kobuki/commands/reset_odometry
+/hast/kobuki/commands/sound
+/hast/kobuki/controller_info
+/hast/kobuki/debug/raw_control_command
+/hast/kobuki/debug/raw_data_command
+/hast/kobuki/debug/raw_data_stream
+/hast/kobuki/events/bumper
+/hast/kobuki/events/button
+/hast/kobuki/events/cliff
+/hast/kobuki/events/digital_input
+/hast/kobuki/events/power_system
+/hast/kobuki/events/robot_state
+/hast/kobuki/events/wheel_drop
+/hast/kobuki/joint_states
+/hast/kobuki/odom
+/hast/kobuki/sensors/core
+/hast/kobuki/sensors/dock_ir
+/hast/kobuki/sensors/imu_data
+/hast/kobuki/sensors/imu_data_raw
+/hast/kobuki/version_info
+/hast/mobile_base_nodelet_manager/bond
+/hast/shutdown 
+/hast/stereo/pose 
+/hast/stereo/markerCloudCAM
+/hast/stereo/markerCloudUGV
+/hast/uav/state 
+/hast/ugv/cmd_vel 
+/hast/ugv/odom 
+/hast/ugv/state 
+/hast/ugv/goal
+/map 
+/map_metadata 
+/move_base/DWAPlannerROS/cost_cloud
+/move_base/DWAPlannerROS/global_plan
+/move_base/DWAPlannerROS/local_plan
+/move_base/DWAPlannerROS/parameter_descriptions
+/move_base/DWAPlannerROS/parameter_updates
+/move_base/DWAPlannerROS/trajectory_cloud
+/move_base/NavfnROS/plan
+/move_base/cancel
+/move_base/current_goal
+/move_base/feedback
+/move_base/global_costmap/costmap
+/move_base/global_costmap/costmap_updates
+/move_base/global_costmap/footprint
+/move_base/global_costmap/inflation_layer/parameter_descriptions
+/move_base/global_costmap/inflation_layer/parameter_updates
+/move_base/global_costmap/obstacle_layer/parameter_descriptions
+/move_base/global_costmap/obstacle_layer/parameter_updates
+/move_base/global_costmap/parameter_descriptions
+/move_base/global_costmap/parameter_updates
+/move_base/global_costmap/static_layer/parameter_descriptions
+/move_base/global_costmap/static_layer/parameter_updates
+/move_base/goal
+/move_base/local_costmap/costmap
+/move_base/local_costmap/costmap_updates
+/move_base/local_costmap/footprint
+/move_base/local_costmap/inflation_layer/parameter_descriptions
+/move_base/local_costmap/inflation_layer/parameter_updates
+/move_base/local_costmap/obstacle_layer/parameter_descriptions
+/move_base/local_costmap/obstacle_layer/parameter_updates
+/move_base/local_costmap/parameter_descriptions
+/move_base/local_costmap/parameter_updates
+/move_base/parameter_descriptions
+/move_base/parameter_updates
+/move_base/result
+/move_base/status
+/move_base_simple/goal
+/odom
+/pgrstereo/left/camera_info 
+/pgrstereo/right/camera_info 
+/rosout 
+/rosout_agg 
+/tag_detections 
+/tag_detections_pose 
+/tf 
+/tf_static  
+/check_led 
+/clean_button 
+/clicked_point 
+/cmd_vel 
+/create/scan 
+/day_button 
+/debris_led 
+/diagnostics 
+/dock 
+/dock_button 
+/dock_led 
+/hour_button 
+/initialpose 
+/ir_omni 
+/minute_button 
+"/>
+
+
+
+
+
+
+<!--
+/diagnostics_agg
+/diagnostics_toplevel_state
+
+
+/hast/kobuki/cmd_vel
+
+/hast/kobuki/commands/controller_info
+
+/hast/kobuki/commands/digital_output
+
+/hast/kobuki/commands/motor_power
+
+/hast/kobuki/commands/reset_odometry
+
+/hast/kobuki/controller_info
+
+/hast/kobuki/debug/raw_control_command
+
+/hast/kobuki/debug/raw_data_command
+
+/hast/kobuki/debug/raw_data_stream
+
+/hast/kobuki/events/digital_input
+
+/hast/kobuki/events/power_system
+
+/hast/kobuki/events/robot_state
+
+/hast/kobuki/joint_states
+
+/hast/kobuki/odom
+
+/hast/kobuki/sensors/core
+
+/hast/kobuki/sensors/imu_data
+
+/hast/kobuki/sensors/imu_data_raw
+
+/hast/kobuki/version_info
+
+-->
+
+
+<!--	
+	<include file="$(find hast)/launch/bag_april.launch">
+		<arg name="node_name" 	value="april_topics" />
+		<arg name="date" 	value="$(arg date)" />
+		<arg name="user" 	value="$(arg user)" />
+		<arg name="run" 	value="$(arg run)" />
+	</include>
+	<include file="$(find hast)/launch/bag_ardrone.launch">
+		<arg name="node_name" 	value="ardrone_topics" />
+		<arg name="date" 	value="$(arg date)" />
+		<arg name="user" 	value="$(arg user)" />
+		<arg name="run" 	value="$(arg run)" />
+	</include>
+	<include file="$(find hast)/launch/bag_battery.launch">
+		<arg name="node_name" 	value="battery_topics" />
+		<arg name="date" 	value="$(arg date)" />
+		<arg name="user" 	value="$(arg user)" />
+		<arg name="run" 	value="$(arg run)" />
+	</include>
+	<include file="$(find hast)/launch/bag_hast.launch">
+		<arg name="node_name" 	value="hast_topics" />
+		<arg name="date" 	value="$(arg date)" />
+		<arg name="user" 	value="$(arg user)" />
+		<arg name="run" 	value="$(arg run)" />
+	</include>
+	<include file="$(find hast)/launch/bag_movebase.launch">
+		<arg name="node_name" 	value="movebase_topics" />
+		<arg name="date" 	value="$(arg date)" />
+		<arg name="user" 	value="$(arg user)" />
+		<arg name="run" 	value="$(arg run)" />
+	</include>
+	<include file="$(find hast)/launch/bag_sync.launch">
+		<arg name="node_name" 	value="sync_topics" />
+		<arg name="date" 	value="$(arg date)" />
+		<arg name="user" 	value="$(arg user)" />
+		<arg name="run" 	value="$(arg run)" />
+	</include>
+	<include file="$(find hast)/launch/bag_tf.launch">
+		<arg name="node_name" 	value="tf_topics" />
+		<arg name="date" 	value="$(arg date)" />
+		<arg name="user" 	value="$(arg user)" />
+		<arg name="run" 	value="$(arg run)" />
+	</include>
+	<include file="$(find hast)/launch/bag_trunks.launch">
+		<arg name="node_name" 	value="trunks_topics" />
+		<arg name="date" 	value="$(arg date)" />
+		<arg name="user" 	value="$(arg user)" />
+		<arg name="run" 	value="$(arg run)" />
+	</include>
+-->
+
+</launch>
+
+
+
+	<!-- <include file="$(find hast)/launch/$(arg tb_base)_driver.launch" /> -->
+
+	<!-- Experiment Nodes -->
+		<!-- record viso2 messages --> 
+
+<!-- 		<node pkg="hast" type="voRecorder.py" name="voRecorder">
+			<param name="/run" value="$(arg run)" type = "str"/>
+			<param name="/path" value="/home/$(arg user)/ros/data/$(arg date)/$(arg run)/" type = "str"/>
+		</node> 
+ -->
+
+
+		<!-- <node	pkg="hast" 	type="ugvJockey"	name="ugvJockey"	output="screen" /> -->
+		<!-- <node 	pkg="hast" 	type="ugvAutopilot"	name="ugvAutopilot"	/> -->
+		<!-- FLY DRONE NEEDS TO BE LAUNCHED SEPERATELY! -->
+		<!-- <node 	pkg="hast" 	type="flyDrone" 	name="flyDrone"  		output="screen" /> -->
+		<!-- FLY DRONE NEEDS TO BE LAUNCHED SEPERATELY! -->
+		<!-- <node pkg="hast" type="setStrobe" name="setStrobe" output="screen"/> -->
+
+
+		<!-- <node 	pkg="hast" 	type="markerObserver" 	name="markerObserver"  		output="screen" /> -->
+		<!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(find ar_pose)/launch/live_multi.rviz"/> -->
+		<!-- <node pkg="tf" type="static_transform_publisher" name="world_to_cam"  args="0 0 0.5 -1.57 0 -1.57 world camera 1" /> -->
+
+	<!-- <node pkg="hast" type="stereoObsSO" name="stereoObs" output="screen" /> -->
+
+
+	<!-- Standalone launcher for running a default Kobuki -->
+<!-- 		<node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>
+		<node pkg="nodelet" type="nodelet" name="mobile_base" args="load kobuki_node/KobukiNodelet mobile_base_nodelet_manager">
+			<rosparam file="$(find kobuki_node)/param/base.yaml" command="load"/>
+			<remap from="mobile_base/odom" to="odom"/>
+			<remap from="mobile_base/joint_states" to="joint_states"/>
+			<remap from="/mobile_base/commands/velocity" to="tb/cmd_vel"/>
+		</node>
+
+		<node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" >
+			<rosparam command="load" file="$(find kobuki_node)/param/diagnostics.yaml" />
+		</node> -->
+
+
+
+<!-- 	<param name="
+/hast/stereo/Cx" value="0.225" type = "double" />
+	<param name="
+	/hast/stereo/Cy" value="0.225" type = "double" />
+ -->
+
+
+
+
+<!--
+<node pkg="hast" type="driveTb" name="driveTb" output="screen" />
+<node pkg="hast" type="stateObs" name="stateObs" />
+<node pkg="hast" type="markerOdom" name="markerOdom"/>
+<node pkg="hast" type="droneFlier" name="droneFlier" output="screen" />
+<node pkg="hast" type="stereoObs" name="stereoObs" output="screen" />
+<node pkg="hast" type="droneCon" name="droneCon"  output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker_all" name="odom_marker"/>
+<node pkg="hast" type="stereoLocalizer" name="stereo" />
+<node pkg="hast" type="droneNav" name="droneNav" output="screen" />
+<node pkg="hast" type="droneFlier" name="droneFlier" output="screen" />
+<node pkg="hast" type="stereoLocalizer" name="stereo" output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker_all" name="odom_marker"/>
+<node pkg="hast" type="droneNav" name="droneNav"  output="screen" />
+<node pkg="hast" type="stateObs" name="stateObs" />
+<node pkg="hast" type="droneFlier" name="droneFlier" output="screen" />
+<node pkg="hast" type="exp" name="exp" output="screen" />
+<node pkg="hast" type="droneNav" name="droneNav" />
+<node pkg="hast" type="droneNav" name="droneNav" output="screen" />
+<node pkg="hast" type="stereoLocalizer" name="stereoLocalizer"/>
+<node pkg="hast" type="stereoLocalizer" name="stereoLocalizer" output="screen" />
+<node pkg="hast" type="exp" name="exp" />
+<node pkg="hast" type="exp" name="exp" output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker_all" name="odom_marker"/>
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker_all" name="odom_marker" output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker1" name="odom_marker_1" output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker2" name="odom_marker_2" output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker3" name="odom_marker_3" output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker4" name="odom_marker_4" output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker5" name="odom_marker_5" output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker6" name="odom_marker_6" output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker7" name="odom_marker_7" output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker8" name="odom_marker_8" output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker9" name="odom_marker_9" output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker10" name="odom_marker_10" output="screen" />
+<node pkg="odom_from_ar_marker" type="odom_from_ar_marker11" name="odom_marker_11" output="screen" />
+
+-->
+

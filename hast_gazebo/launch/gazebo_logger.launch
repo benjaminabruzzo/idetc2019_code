@@ -1,0 +1,28 @@
+<launch>
+	<arg name="run" 				default="002" />
+	<arg name="date" 				default="20180417" />
+	<arg name="world_origin" 		default="/vicon/origin" />
+	<arg name="metronome_type" 		default="Imu" />
+	<arg name="metronome_topic" 	default="/ardrone/imu" />
+	<arg name="pid_topic" 			default="/hast/uav/pid" />
+	<arg name="record_pid" 			default="false" />
+
+
+	<group ns="hast" >
+		<node pkg="hast_gazebo" type="gazebo_logger.py" name="gazebo_logger" output="screen" >
+			<param name="/run" 				value="$(arg run)" />
+			<param name="/date" 			value="$(arg date)" />
+			<param name="/pid_topic" 		value="$(arg pid_topic)" />
+			<param name="/record_pid" 		value="$(arg record_pid)" />
+			<param name="/world_origin" 	value="$(arg world_origin)" />
+			<param name="/metronome_type" 	value="$(arg metronome_type)" />
+			<param name="/metronome_topic" 	value="$(arg metronome_topic)" />
+			<param name="/xf_array" 		value="/vicon/kobuki/base_TF,vicon/uav/ardrone_red_led,vicon/uav/ardrone_blue_led,vicon/uav/ardrone_green_led,id02_16h5/base_footprint,id03_16h5/base_footprint,id07_16h5/base_footprint" /> <!-- no spaces! -->
+			<param name="/xf_names" 		value="kobuki_02,red,blue,green,april02,april03,april07" /> <!-- no spaces! -->
+		</node>
+	</group>
+
+    <arg name="launcher"    default="gazebo_logger_launch" />
+    <node pkg="hast"        type="shutdownListener" output="screen" name="shutdownListener_$(arg launcher)" required="true"/>
+
+</launch>

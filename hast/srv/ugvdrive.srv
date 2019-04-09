@@ -1,0 +1,6 @@
+bool drive
+float64 vel
+float64 yaw
+float64 time
+---
+bool stopped

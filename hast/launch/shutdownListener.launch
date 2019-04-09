@@ -1,0 +1,7 @@
+<!-- -*- mode: XML -*-  -->
+
+<launch>
+	<arg name="launcher" 	default="null" />
+	<node 	pkg="hast" 	type="shutdownListener"		name="shutdownListener_$(arg launcher)"	output="screen"	required="true"/>
+</launch>
+

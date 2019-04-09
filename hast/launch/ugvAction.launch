@@ -1,0 +1,17 @@
+<!-- -*- mode: XML -*-  -->
+
+<launch>
+	<arg name="launcher" 	default="action_launch" />
+
+	<node	pkg="hast" 	type="ugvAction"	name="ugvAction" 	output="screen" 	required="true">
+		<param name="map"			value="map"	/>
+		<param name="kill_topic"	value="/hast/shutdown"	/>
+		<param name="ugv_goaltopic"	value="/hast/ugv/goal"	/>
+		<param name="s_move_base_namespace"	value="/move_base"	/>
+	</node>
+
+	<node pkg="rviz" 	type="rviz" 		name="rviz" />  <!-- args="-d $(find ar_pose)/launch/live_multi.rviz"/> -->
+	<!-- <node pkg="hast"	type="killhast"		name="killhast_$(arg launcher)"		output="screen" required="true"/> -->
+	<node pkg="hast"	type="shutdownListener"	name="shutdownListener_$(arg launcher)"	output="screen"	required="true"/>
+
+</launch>

@@ -1,0 +1,37 @@
+TrajectoryPlannerROS:
+  max_vel_x: 0.25
+  min_vel_x: 0.1
+
+  max_vel_theta: 0.2
+  min_in_place_vel_theta: 0.1
+
+  acc_lim_theta: 3.2
+  acc_lim_x: 2.5
+  acc_lim_y: 2.5
+  holonomic_robot: false
+
+  # goal tolerance parameters
+  yaw_goal_tolerance: 0.1            # 0.1 means 5.7 degrees
+  xy_goal_tolerance: 0.2             # meters?
+  latch_xy_goal_tolerance: true
+
+  # Trajectory Scoring Parameters
+  meter_scoring: true             # If true, distances are expressed in meters; otherwise grid cells
+  path_distance_bias: 0.8         # The weighting for how much the controller should stay close to the path it was given
+  goal_distance_bias: 2.0         # The weighting for how much the controller should attempt to reach its local goal, also controls speed
+  occdist_scale: 0.05            # The weighting for how much the controller should attempt to avoid obstacles
+                                  # occdist_scale * (maximum obstacle cost along the trajectory in obstacle cost (0-254))
+
+  heading_lookahead: 1.5        # How far to look ahead in meters when scoring different in-place-rotation trajectories
+  oscillation_reset_dist: 0.05    # How far the robot must travel in meters before oscillation flags are reset  
+
+  publish_cost_grid: true
+  dwa: false                      # Whether to use the Dynamic Window Approach (DWA)_ or whether to use Trajectory Rollout 
+                                  # (NOTE: In our experience DWA worked as well as Trajectory Rollout and is computationally less expensive.
+                                  # It is possible that robots with extremely poor acceleration limits could gain from running Trajectory Rollout,
+                                  # but we recommend trying DWA first.) 
+  # The first section of parameters above define the velocity limits of the robot. The second section defines the acceleration limits of the robot. 
+  # The base_local_planner is responsible for computing velocity commands to send to the mobile base of the robot given a high-level plan. 
+  # We'll need to set some configuration options based on the specs of our robot to get things up and running. 
+  # Open up a file called base_local_planner_params.yaml and paste the following text into it:
+  # Note: This section covers only basic configuration options for the TrajectoryPlanner. For documentation on the full range of options, please see the base_local_planner documentation. 

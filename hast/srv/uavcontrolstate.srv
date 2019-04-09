@@ -1,0 +1,9 @@
+bool flip 		# boolean switch for control vs hover
+vector3 dP_g	# desired global position of uav
+float64 dYaw	# desired global yaw of uav
+
+bool directtilt # boolean switch for PV control vs direct angular control
+vector3 tilt	# commanded tilt angle for uav
+float64 YawRate # commanded yaw rate for uav
+---
+bool onoff		# dummy response to verify command set

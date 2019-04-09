@@ -1,0 +1,29 @@
+git checkout a9ced0d 
+git checkout c6ae2d6
+git checkout e8fc62f
+
+git checkout 337cc58
+
+
+This is where the breakage happened: 
+git checkout 3d984be 
+
+This was the commit prior: 
+git checkout e8fc62f
+git branch wtf
+git add --all .
+git commit -m 'wtf'
+git push bb wtf
+
+
+git branch wtf e8fc62f
+# make some trivial chance
+git add --all . 
+git commit -m 'wtf'
+git push bb wtf
+
+# then merge the branch
+git checkout master
+git pull bb master
+git merge wtf
+git push bb master

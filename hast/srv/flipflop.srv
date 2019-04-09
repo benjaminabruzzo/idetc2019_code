@@ -1,0 +1,6 @@
+# boolean bit for guidance/odometry information
+# boolean bit for changing UAV control mode between measuring and guiding from apriltags
+bool flip 
+bool mode # boolean bit for linear/angular odometry mode
+---
+bool flop # service response bit

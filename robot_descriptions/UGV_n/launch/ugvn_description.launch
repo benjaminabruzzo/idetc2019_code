@@ -1,0 +1,14 @@
+<launch>
+	<arg name="ugv_ns" 	default="ugv1" />
+	<arg name="config" 	default="$(find robot_descriptions)/UGV_n/urdf/hast_ugvn_kobuki_stereo.urdf.xacro"/> 
+	
+	<param name="$(arg ugv_ns)/robot_description" command="$(find xacro)/xacro '$(arg config)' ns_arg:=$(arg ugv_ns) --inorder" />
+
+	<node name="$(arg ugv_ns)_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+		<param name="tf_prefix"	 		value="/gazebo"	/>
+		<remap from="/joint_states" 	to="$(arg ugv_ns)/joint_states" />
+		<remap from="robot_description" to="$(arg ugv_ns)/robot_description" />
+	</node>
+
+</launch>
+

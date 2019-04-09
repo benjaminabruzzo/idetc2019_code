@@ -1,0 +1,6 @@
+bool hover
+Vector3 position_tb
+float64 heading_tb
+---
+bool atDestination
+bool lostDrone

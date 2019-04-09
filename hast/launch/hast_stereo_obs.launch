@@ -1,0 +1,55 @@
+<launch>
+	<arg name="trial" 				default="001" />
+	<arg name="date" 				default="20181207" />
+	<arg name="user" 				default="$(env USER)" />
+	<arg name="gazebo_sim" 			default="false"/>
+	<arg name="ugv_n" 				default="kobuki" />
+	<arg name="roi_halfwindow" 		default="100" />
+	<arg name="saveraw" 			default="false" />
+	<arg name="trigger_saveraw" 	default="false" />
+	<arg name="uav_TF_parent" 		default="$(arg ugv_n)/base_footprint" />
+	<arg name="uav_TF_child" 		default="/hast/uav/stereo_raw" />
+	<arg name="showcircles" 		default="false"/>
+	<arg name="showYUV" 			default="false"/>
+	<arg name="raw_trigger_topic" 	default="$(arg ugv_n)/pgrstereo/saveTrigger"/>
+	<arg name="left_raw_topic" 		default="$(arg ugv_n)/pgrstereo/left/image_raw"/>
+	<arg name="right_raw_topic" 	default="$(arg ugv_n)/pgrstereo/right/image_raw"/>
+	<arg name="left_rect_topic" 	default="$(arg ugv_n)/pgrstereo/left/image_rect_color"/>
+	<arg name="right_rect_topic" 	default="$(arg ugv_n)/pgrstereo/right/image_rect_color"/>
+
+	<arg name="color_param_file"  default="$(find hast)/config/stereo_tbrl_params.yaml" />	
+	<!-- add if else for stereo param depending upon gazebo sim boolean -->
+	<arg name="stereo_param_file"  default="$(find hast)/cam_info/ugvn/$(arg ugv_n)_pgr_params.yaml" />	
+
+	<!-- <node 	pkg="hast" 	type="stereoObs"	name="$(arg ugv_n)_stereoObs"	output="screen" > -->
+	<node 	pkg="hast" 	type="stereoObs"	name="$(arg ugv_n)_stereoObs_$(env HOST)">
+		<rosparam command="load" 		file="$(arg color_param_file)" />
+		<rosparam command="load" 		file="$(arg stereo_param_file)" />
+		<param name="ugv_n" 			value="$(arg ugv_n)"/>
+		<param name="user" 				value="$(arg user)"/>
+		<param name="date" 				value="$(arg date)" type="str"/>
+		<param name="trial" 			value="$(arg trial)" type="str"/>
+		<param name="gazebo_sim" 		value="$(arg gazebo_sim)"/>
+		<param name="uav_TF_parent" 	value="$(arg uav_TF_parent)"/>
+		<param name="uav_TF_child" 		value="$(arg uav_TF_child)"/>
+		<param name="saveraw" 			value="$(arg saveraw)"/>
+		<param name="trigger_saveraw"	value="$(arg trigger_saveraw)"/>
+		<param name="showcircles" 		value="$(arg showcircles)"/>
+		<param name="showYUV" 			value="$(arg showYUV)"/>
+		<param name="roi_halfwindow" 	value="$(arg roi_halfwindow)" type = "int" />
+		<param name="raw_trigger_topic" value="$(arg raw_trigger_topic)"/>
+		<param name="left_raw_topic" 	value="$(arg left_raw_topic)"/>
+		<param name="right_raw_topic" 	value="$(arg right_raw_topic)"/>
+		<param name="left_rect_topic" 	value="$(arg left_rect_topic)"/>
+		<param name="right_rect_topic" 	value="$(arg right_rect_topic)"/>
+
+		<param name="Pose_pub" 				value="/$(arg ugv_n)/stereo/pose"/>
+		<param name="OdomSwitch_ser" 		value="/$(arg ugv_n)/service/stereo/OdomSwitch"/>
+
+		<param name="cam_cloud_frameID" 	value="$(arg ugv_n)/hast/stereo_center"/>
+		<param name="ugv_cloud_frameID" 	value="$(arg ugv_n)/hast/base_footprint"/>
+		<param name="stereoCloudCAM_pub" 	value="/$(arg ugv_n)/stereo/markerCloudCAM"/>
+		<param name="stereoCloudUGV_pub" 	value="/$(arg ugv_n)/stereo/markerCloudUGV"/>
+
+	</node>
+</launch>

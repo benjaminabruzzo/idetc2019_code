@@ -1,0 +1,45 @@
+<launch>
+	<arg name="ugv_n" 				default="ugv1" />
+	<arg name="trial" 				default="020" />
+	<arg name="date" 				default="17180215" />
+	<arg name="tb_base" 			default="kobuki" />
+	<arg name="launcher" 			default="cmd_vel_limit_launch" />
+	<arg name="cmd_vel_x_limit" 	default="0.4" />
+	<arg name="cmd_vel_w_limit" 	default="0.2" />
+	<arg name="cmd_vel_sub_topic" 	default="/hast/kobuki/cmd_vel_raw" />
+	<arg name="cmd_vel_pub_topic" 	default="/hast/kobuki/cmd_vel_limited" />
+	<arg name="local_path_topic" 	default="/move_base/DWAPlannerROS/local_plan" />
+	<arg name="global_path_topic" 	default="/move_base/DWAPlannerROS/global_plan" />
+	
+	<group ns="hast" >
+		<node pkg="hast" type="ugv_logger.py" name="$(arg ugv_n)_logger" output="screen" >
+			<param name="/ugv_n" 			value="$(arg ugv_n)" />
+			<param name="/trial" 			value="$(arg trial)" />
+			<param name="/date" 			value="$(arg date)" />
+			<param name="/cmd_vel_x_limit" 	value="$(arg cmd_vel_x_limit)" />
+			<param name="/cmd_vel_w_limit" 	value="$(arg cmd_vel_w_limit)" />
+			<param name="/cmd_vel_sub_topic" 	value="$(arg cmd_vel_sub_topic)" />
+			<param name="/cmd_vel_pub_topic" 	value="$(arg cmd_vel_pub_topic)" />
+			<param name="/local_path_topic" 	value="$(arg local_path_topic)" />
+			<param name="/global_path_topic" 	value="$(arg global_path_topic)" />
+		</node>
+	</group>
+
+
+
+
+<!-- 	<node pkg="rostopic" 	type="rostopic" 		name="cmd_vel_limit_echo" 		output="screen" 	args="echo /hast/kobuki/cmd_vel_limited" />
+	<node pkg="hast"		type="killhast"			output="screen"	name="killhast_$(arg launcher)"			required="true"/>
+	<node pkg="hast"		type="shutdownListener"	output="screen" name="shutdownListener_$(arg launcher)"	required="true"/>
+ -->
+
+</launch>
+
+<!-- 
+rostopic pub -r 10 /ugv1/cmd_vel_raw geometry_msgs/Twist  '{linear:  {x: 1.0, y: 0.0, z: 0.0}, angular: {x: 0.0,y: 0.0,z: 1.0}}'
+ -->
+<!-- 
+/move_base/DWAPlannerROS/global_plan
+/move_base/DWAPlannerROS/local_plan
+/move_base/NavfnROS/plan
+ -->

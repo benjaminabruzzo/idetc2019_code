@@ -1,0 +1,2 @@
+instead of using scaramuzza pre-integration of imu along smooth manifold, we use a 4 state xyz-yaw discrete kf to simplify modeling, we show that the results are similar enough that the more involved pre-integration is not necessary.
+[fortser, carlone, dalleart, scaraamuz, imu preintegration on manifold for visual-inertial maximum a prior estimation]

@@ -1,0 +1,64 @@
+https://answers.ros.org/question/41433/multiple-robots-simulation-and-navigation/
+https://github.com/kth-ros-pkg/ridgeback/wiki/Control,-odometry,-navigation-and-mapping
+http://www.clearpathrobotics.com/assets/guides/jackal/navigation.html
+
+
+
+I have a problem when trying to start controllers for multiple robots that they cannot find the controller_manager
+
+[WARN] [1498038782.062813, 84.949000]: Controller Spawner couldn't find the expected controller_manager ROS interface.
+
+I am using the plugin in the .xacro file like so:
+
+<gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+</gazebo>
+
+and then launching each robot in a group with a different namespace.  What am I doing wrong?
+
+
+
+
+
+
+Minutes after posting this question I managed to resolve it:
+
+First of all you have to remove the namespace tag from the .xacro/urdf file in order for the robots to get a namespece you specify, like so:
+
+ <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    </plugin>
+  </gazebo>
+
+Second, you have to specify the namespace almost everywhere even if you have the group tag, and I'll give an example for one robot:
+
+<group ns="/robot1">
+  <param name="tf_prefix" value="atlas1" />
+   <rosparam file="$(find YOUR_PACKAGE)/config/control.yaml" command="load" ns="/robot1" /> 
+   <param name="/robot1/robot_description" command="$(find xacro)/xacro --inorder $(arg model)"/>
+      <node name="urdf_spawner_1" pkg="gazebo_ros" type="spawn_model"
+        args="-z 1.0 -unpause -urdf -model robot1 -param robot_description " respawn="false" output="screen">
+      </node>
+
+      <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher_1">
+        <param name="publish_frequency" type="double" value="30.0" />
+      </node>
+
+      <node name="robot1_controller_spawner" pkg="controller_manager" type="spawner" 
+        args="--namespace=/robot1
+        joint_state_controller
+        tri_wheel_controller
+        arm_controller
+        --shutdown-timeout 3">
+      </node>
+
+      <node name="rqt_robot_steering1" pkg="rqt_robot_steering" type="rqt_robot_steering">
+        <param name="default_topic" value="/robot1/tri_wheel_controller/cmd_vel"/>
+      </node>
+  </group>
+
+And so on for another robot. Keep in mind that i redefined the robot_description each time in order for the controller to find it in the same namespace. It didn't work for me to define it outside and the use it in the group like /robot_description
+
+tf_prefix is used in order to see all the robots in rviz. I am not sure how does it work without it, or how to use something else as tf_prefix is deprecated. For now it does not work to see it in rviz so I figures it does not calculate the tf for the link. I don't know how to solve this

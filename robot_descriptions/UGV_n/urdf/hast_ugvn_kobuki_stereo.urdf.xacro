@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<robot name="kobuki_standalone"
+       xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://ros.org/wiki/xacro">
+	
+
+	<!-- Defines the kobuki component tag. -->
+	<xacro:include filename="$(find robot_descriptions)/UGV_n/urdf/hast_ugvn_kobuki.urdf.xacro" />
+
+	<!-- directly define ugv namespace -->
+	<!-- <xacro:kobuki_stereo X_ROBOT_NAMESPACE="ugv1"/> -->
+
+	<!--  define ugv namespace by argument-->
+	<xacro:arg name="ns_arg" default="ugv_n" />
+	<xacro:kobuki_stereo X_ROBOT_NAMESPACE="$(arg ns_arg)"/>
+
+</robot>

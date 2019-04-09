@@ -1,0 +1,25 @@
+<package>
+  <description brief="hast">
+
+     hast
+
+  </description>
+  <author></author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/hast</url>
+  <depend package="sensor_msgs"/>
+  <!-- <depend package="opencv2"/> -->
+  <depend package="libpcl-all-dev"/>
+  <depend package="nav_msgs"/> 
+  <depend package="cv_bridge"/>
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
+  <depend package="geometry_msgs"/>
+  <depend package="image_transport"/>
+  <depend package="tf"/>
+  <depend package="ardrone_autonomy"/>
+  <depend package="pointgrey_camera_driver"/>
+</package>
+
+

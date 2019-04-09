@@ -1,0 +1,291 @@
+<?xml version="1.0" ?>
+<robot name="kobuki" xmlns:xacro="http://ros.org/wiki/xacro">
+   <!-- Included Files -->
+      <xacro:include filename="$(find robot_descriptions)/UGV_n/urdf/common_properties.urdf.xacro"/>
+      <xacro:include filename="$(find robot_descriptions)/UGV_n/urdf/hast_ugvn_pgrstereo.urdf.xacro"/>
+      <xacro:include filename="$(find robot_descriptions)/UGV_n/urdf/hast_ugvn_kobuki_gazebo.urdf.xacro"/>
+
+   <xacro:macro name="kobuki_stereo" params="X_ROBOT_NAMESPACE">
+      <!-- properties -->
+         <xacro:property name="X_PI" value="3.1415926535897931" /> 
+         <xacro:property name="X_RADIUS" value="0.02" />
+         <xacro:property name="X_LENGTH" value="0.1" />
+         <xacro:property name="camera_box" value="0.025" /> <!-- Size of square 'camera' box -->
+         <xacro:property name="X_BASELINE" value="0.1524" /> <!-- Size of square 'camera' box -->
+      <!-- Kobuki Hardware --> 
+         <link name="${X_ROBOT_NAMESPACE}/base_footprint"/>
+
+         <joint name="${X_ROBOT_NAMESPACE}/base_joint" type="fixed">
+            <origin xyz="0 0 0.0102" rpy="0 0 0" />
+            <parent link="${X_ROBOT_NAMESPACE}/base_footprint"/>
+            <child  link="${X_ROBOT_NAMESPACE}/base_link" />
+         </joint>
+         <link name="${X_ROBOT_NAMESPACE}/base_link">
+            <visual>
+             <geometry>
+               <!-- new mesh -->
+               <mesh filename="package://robot_descriptions/UGV_n/meshes/main_body.dae" />
+             </geometry>
+             <origin xyz="0.001 0 0.05199" rpy="0 0 0"/>
+            </visual>
+            <collision name="base">
+             <geometry>
+               <cylinder length="0.10938" radius="0.178"/>
+             </geometry>
+             <origin xyz="0.0 0 0.05949" rpy="0 0 0"/>
+            </collision>
+            <inertial>
+             <mass value="2.4"/> <!-- 2.4/2.6 kg for small/big battery pack -->
+             <origin xyz="0.01 0 0"/>
+             <inertia ixx="0.019995" ixy="0.0" ixz="0.0" iyy="0.019995" iyz="0.0" izz="0.03675" />
+            </inertial>
+         </link>
+
+         <joint name="${X_ROBOT_NAMESPACE}/wheel_left_joint" type="continuous">
+            <parent link="${X_ROBOT_NAMESPACE}/base_link"/>
+            <child link="${X_ROBOT_NAMESPACE}/wheel_left_link"/>
+            <origin xyz="0.00 ${0.23/2} 0.0250" rpy="${-M_PI/2} 0 0"/>
+            <axis xyz="0 0 1"/>
+         </joint>
+         <link name="${X_ROBOT_NAMESPACE}/wheel_left_link">
+<!--             <visual>
+             <geometry>
+               <mesh filename="package://robot_descriptions/UGV_n/meshes/wheel.dae"/>
+             </geometry>
+             <origin xyz="0 0 0" rpy="0 0 0"/>
+            </visual> -->
+            <collision>
+             <geometry>
+               <cylinder length="0.0206" radius="0.0352"/>
+             </geometry>
+             <origin rpy="0 0 0" xyz="0 0 0"/>
+            </collision>
+            <inertial>
+              <mass value="0.01" />
+              <origin xyz="0 0 0" />
+              <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+            </inertial>
+         </link>
+
+         <joint name="${X_ROBOT_NAMESPACE}/wheel_right_joint" type="continuous">
+            <parent link="${X_ROBOT_NAMESPACE}/base_link"/>
+            <child link="${X_ROBOT_NAMESPACE}/wheel_right_link"/>
+            <origin xyz="0.00 -${0.23/2} 0.0250" rpy="${-M_PI/2} 0 0"/>
+            <axis xyz="0 0 1"/>
+         </joint>
+         <link name="${X_ROBOT_NAMESPACE}/wheel_right_link">
+<!--             <visual>
+             <geometry>
+               <mesh filename="package://robot_descriptions/UGV_n/meshes/wheel.dae"/>
+             </geometry>
+             <origin xyz="0 0 0" rpy="0 0 0"/>
+            </visual> -->
+            <collision>
+             <geometry>
+               <cylinder length="0.0206" radius="0.0350"/>
+             </geometry>
+             <origin rpy="0 0 0" xyz="0 0 0"/>
+            </collision>
+            <inertial>
+              <mass value="0.01" />
+              <origin xyz="0 0 0" />
+              <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+            </inertial>
+         </link>
+
+         <joint name="${X_ROBOT_NAMESPACE}/caster_front_joint" type="fixed">
+            <parent link="${X_ROBOT_NAMESPACE}/base_link"/>
+            <child link="${X_ROBOT_NAMESPACE}/caster_front_link"/>
+            <origin xyz="0.115 0.0 0.007" rpy="${-M_PI/2} 0 0"/>
+         </joint>
+         <link name="${X_ROBOT_NAMESPACE}/caster_front_link">
+            <collision>
+               <geometry>
+               <cylinder length="0.0176" radius="0.017"/>
+               </geometry>
+               <origin rpy="0 0 0" xyz="0 0 0"/>
+            </collision>
+            <inertial>
+               <mass value="0.01" />
+               <origin xyz="0 0 0" />
+               <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+            </inertial>
+         </link>
+
+         <joint name="${X_ROBOT_NAMESPACE}/caster_back_joint" type="fixed">
+            <parent link="${X_ROBOT_NAMESPACE}/base_link"/>
+            <child link="${X_ROBOT_NAMESPACE}/caster_back_link"/>
+            <origin xyz="-0.135 0.0 0.009" rpy="${-M_PI/2} 0 0"/>
+         </joint>
+         <link name="${X_ROBOT_NAMESPACE}/caster_back_link">
+            <collision>
+            <geometry>
+            <cylinder length="0.0176" radius="0.017"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            </collision>
+            <inertial>
+            <mass value="0.01" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+            </inertial>
+         </link>
+
+      <!-- PC and Camera support -->
+         <joint name="${X_ROBOT_NAMESPACE}/frame_joint" type="fixed">
+            <origin xyz="0 0 0.148" rpy="0 0 0" />
+            <parent link="${X_ROBOT_NAMESPACE}/base_link"/>
+            <child link="${X_ROBOT_NAMESPACE}/frame_link" />
+         </joint>
+         <link name="${X_ROBOT_NAMESPACE}/frame_link">
+            <visual>
+            <geometry>
+            <mesh filename="package://robot_descriptions/UGV_n/meshes/hast_kobuki_frame_grey.dae" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+            </visual>
+            <collision>
+            <geometry>
+            <cylinder length="0.10938" radius="0.176"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            </collision>
+            <inertial>
+            <mass value="0.1"/> <!-- 2.4/2.6 kg for small/big battery pack -->
+            <origin xyz="0 0 0"/>
+            <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001" />
+            </inertial>
+         </link>
+
+      <!-- Camera Definitions -->
+         <!-- camera center -->
+         <joint name="${X_ROBOT_NAMESPACE}/stereo_center_joint" type="fixed">
+            <!-- <axis xyz="1 0 0" /> -->
+            <origin xyz="-0.0014 0 0.0804" rpy="0 -${20*X_PI/180} 0" />
+            <parent link="${X_ROBOT_NAMESPACE}/frame_link"/>
+            <child link="${X_ROBOT_NAMESPACE}/stereo_center"/>
+         </joint>
+         <link name="${X_ROBOT_NAMESPACE}/stereo_center"/>
+
+         <!-- left camera -->
+         <joint name="${X_ROBOT_NAMESPACE}/left_camera_joint" type="fixed">
+            <origin xyz="0 ${X_BASELINE/2} 0" rpy="0 0 0" />
+            <parent link="${X_ROBOT_NAMESPACE}/stereo_center"/>
+            <child link="${X_ROBOT_NAMESPACE}/stereo_left"/>
+         </joint>
+         <link name="${X_ROBOT_NAMESPACE}/stereo_left">
+            <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+            <box size="${camera_box} ${camera_box} ${camera_box}"/>
+            </geometry>
+            </collision>
+            <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+            <box size="${camera_box} ${camera_box} ${camera_box}"/>
+            </geometry>
+            <material name="black"/>
+            </visual>
+            <inertial>
+            <mass value="1e-5" />
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+            </inertial>
+         </link>
+
+         <!-- right camera -->
+         <joint name="${X_ROBOT_NAMESPACE}/right_camera_joint" type="fixed">
+            <origin xyz="0 ${-X_BASELINE/2} 0" rpy="0 0 0" />
+            <parent link="${X_ROBOT_NAMESPACE}/stereo_center"/>
+            <child link="${X_ROBOT_NAMESPACE}/stereo_right"/>
+         </joint>
+         <link name="${X_ROBOT_NAMESPACE}/stereo_right">
+            <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+            <box size="${camera_box} ${camera_box} ${camera_box}"/>
+            </geometry>
+            </collision>
+            <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+            <box size="${camera_box} ${camera_box} ${camera_box}"/>
+            </geometry>
+            <material name="black"/>
+            </visual>
+            <inertial>
+            <mass value="1e-5" />
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+            </inertial>
+         </link>
+
+      <!-- Kobuki's sensors -->
+         <!-- gyro -->
+         <joint name="${X_ROBOT_NAMESPACE}/gyro_joint" type="fixed">
+            <axis xyz="0 1 0"/>
+            <origin xyz="0.056 0.062 0.0202" rpy="0 0 0"/>
+            <parent link="${X_ROBOT_NAMESPACE}/base_link"/>
+            <child link="${X_ROBOT_NAMESPACE}/gyro_link"/>
+         </joint>
+         <link name="${X_ROBOT_NAMESPACE}/gyro_link">
+            <inertial>
+            <mass value="0.001"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001"/>
+            </inertial>
+         </link>
+
+         <!-- cliff_sensor_left_joint -->
+         <joint name="${X_ROBOT_NAMESPACE}/cliff_sensor_left_joint" type="fixed">
+            <origin xyz="0.08734 0.13601 0.0214" rpy="0 ${M_PI/2} 0" />
+            <parent link="${X_ROBOT_NAMESPACE}/base_link"/>
+            <child link="${X_ROBOT_NAMESPACE}/cliff_sensor_left_link" />
+         </joint>
+         <link name="${X_ROBOT_NAMESPACE}/cliff_sensor_left_link">
+            <inertial>
+            <mass value="0.0001" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001" />
+            </inertial>
+         </link>
+
+         <!-- cliff_sensor_right -->
+         <joint name="${X_ROBOT_NAMESPACE}/cliff_sensor_right_joint" type="fixed">
+            <origin xyz="0.085 -0.13601 0.0214" rpy="0 ${M_PI/2} 0" />
+            <parent link="${X_ROBOT_NAMESPACE}/base_link"/>
+            <child link="${X_ROBOT_NAMESPACE}/cliff_sensor_right_link" />
+         </joint>
+         <link name="${X_ROBOT_NAMESPACE}/cliff_sensor_right_link">
+            <inertial>
+            <mass value="0.0001" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001" />
+            </inertial>
+         </link>
+
+         <!-- cliff_sensor_front -->
+         <joint name="${X_ROBOT_NAMESPACE}/cliff_sensor_front_joint" type="fixed">
+            <origin xyz="0.156 0.00 0.0214" rpy="0 ${M_PI/2} 0" />
+            <parent link="${X_ROBOT_NAMESPACE}/base_link"/>
+            <child link="${X_ROBOT_NAMESPACE}/cliff_sensor_front_link" />
+         </joint>
+         <link name="${X_ROBOT_NAMESPACE}/cliff_sensor_front_link">
+            <inertial>
+            <mass value="0.0001" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001" />
+            </inertial>
+         </link>
+
+
+      <!-- pgr_setup -->
+         <xacro:kobuki_pgr X_ROBOT_NAMESPACE="${X_ROBOT_NAMESPACE}" X_BASELINE="${X_BASELINE}"/>
+
+      <!-- Kobuki Gazebo simulation details -->
+         <xacro:kobuki_sim X_ROBOT_NAMESPACE="${X_ROBOT_NAMESPACE}"/>
+
+   </xacro:macro>
+</robot>

@@ -1,0 +1,12 @@
+<launch>
+	<!-- Spawn tags from 20180619_021-->
+	<!-- ABCDE config of landmarks -->
+	<include file="$(find robot_descriptions)/common/launch/dae_block.launch" >
+		<arg name="tag"	value="dae_block"/> 
+		<arg name="x"	value="0.7757"/> 
+		<arg name="y"	value="1.0299"/> 
+		<arg name="z"   value="0.0285"/> 
+		<arg name="Y"	value="0.7224"/> 
+	</include>
+
+</launch>

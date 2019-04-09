@@ -1,0 +1,6 @@
+bool drive
+vector3 P	# desired global position of ugv
+float64 Yaw	# desired global yaw of uav
+bool turnonly # turn to yaw at goal without driving
+---
+bool stopped

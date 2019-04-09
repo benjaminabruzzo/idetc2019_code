@@ -1,0 +1,64 @@
+<launch>
+	<arg name="ugv_n"   			default="ugv1" />
+	<arg name="tb_base"   			default="kobuki" />
+	<arg name="launcher" 			default="$(arg ugv_n)_launch" />
+	<arg name="raw_wheel_cmd_topic" default="$(arg ugv_n)/cmd_vel_raw" />
+	<arg name="ugv_x_limit"   		default="0.15" />
+	<arg name="ugv_w_limit"   		default="0.2" />
+	<arg name="cost_scaling_factor" default="7" />
+
+	<param name="/hast/tb_base" value="kobuki" type = "str" />
+
+	<include file="$(find hast)/launch/kobuki/kobuki_driver.launch">
+		<arg name="raw_wheel_cmd_topic" value="$(arg raw_wheel_cmd_topic)" />
+		<arg name="speed_lim_v" 		value="$(arg ugv_x_limit)" />
+		<arg name="speed_lim_w" 		value="$(arg ugv_w_limit)" />
+		<arg name="odom_frame"			value="/$(arg ugv_n)/hast/odom"/>
+		<arg name="base_frame"			value="/$(arg ugv_n)/hast/base_footprint"/>
+	</include>
+
+	<include file="$(find hast)/launch/kobuki/ugvn_pgr.launch">
+		<arg name="ugv_ns" value="$(arg ugv_n)" />
+	</include>
+
+	<node name="map_server" pkg="map_server" type="map_server" args="$(find hast)/maps/square300x300.yaml"/>
+	<node ns="$(arg ugv_n)" pkg="tf" type="static_transform_publisher" name="tf_map_2_$(arg ugv_n)_map" 
+		args="0 0 0 0 0 0 /map /$(arg ugv_n)/map 100"/> 
+	<node ns="$(arg ugv_n)" pkg="tf" type="static_transform_publisher" name="tf_$(arg ugv_n)_map2$(arg ugv_n)_odom" 
+		args="0 0 0 0 0 0 /$(arg ugv_n)/map /$(arg ugv_n)/hast/odom 100"/> 
+
+	<!-- move base -->
+	<include file="$(find hast)/launch/kobuki/kobuki_move_base.launch">
+		<arg name="ugv_ns" 				value="$(arg ugv_n)"/> 
+		<arg name="goal_topic" 			value="$(arg ugv_n)/goal" />
+		<arg name="dwa_params" 			value="tbrl"/> 
+		<arg name="raw_command_topic"	value="$(arg raw_wheel_cmd_topic)" />
+		<arg name="kobuki_odom_topic" 	value="$(arg ugv_n)/hast/odom"/> 
+	</include>
+
+	<!-- action server -->
+	<node	ns="$(arg ugv_n)"	pkg="hast" 	type="ugvAction"	name="$(arg ugv_n)_Action_$(env HOST)"	output="screen">
+		<param name="map"					value="map"	/>
+		<param name="kill_topic"			value="/hast/shutdown"	/>
+		<param name="ugv_goaltopic"			value="action/goal"	/>
+		<param name="s_move_base_namespace"	value="/$(arg ugv_n)/move_base"	/>
+	</node>
+
+	<node pkg="rostopic" 	type="rostopic" 		output="screen" name="ugvGoalEcho" 						args="echo $(arg ugv_n)/goal" />
+	<node pkg="hast"		type="killhast"			output="screen"	name="killhast_$(arg launcher)"			required="true"/>
+	<node pkg="hast"		type="shutdownListener"	output="screen" name="shutdownListener_$(arg launcher)"	required="true"/>
+
+	<!-- Launch Rviz -->
+	<arg name="rvizconfig" 	default="$(find hast)/config/rviz/ugvn_mk3.rviz" />
+	<node pkg="rviz"  type="rviz" 	name="rviz_$(arg launcher)" args="-d $(arg rvizconfig)"/> 
+	<include file="$(find hast)/launch/kobuki/kobuki_ugvn_TFdescription.launch">
+		<arg name="ugv_ns" 		value="ugv1" />
+	</include>
+	
+	<!-- <include file="$(find hast)/launch/april/rviz_tag.launch"> <arg name="tag" value="id07" /> </include> -->
+	<!-- <include file="$(find hast)/launch/april/rviz_tag.launch"> <arg name="tag" value="id03" />	</include> -->
+
+
+
+</launch>
+<!-- $(arg ugv_n) -->

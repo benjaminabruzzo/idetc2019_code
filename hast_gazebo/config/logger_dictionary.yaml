@@ -1,0 +1,18 @@
+body_labels:
+    - {name: ugv1, path: /vicon/ugv1/base_TF}
+    - {name: ugv2, path: /vicon/ugv2/base_TF}
+    - {name: red, path: /vicon/uav/ardrone_red_led}
+    - {name: blue, path: /vicon/uav/ardrone_blue_led}
+    - {name: green, path: /vicon/uav/ardrone_green_led}
+    - {name: april00, path: /id00_16h5/base_footprint}
+    - {name: april01, path: /id01_16h5/base_footprint}
+    - {name: april02, path: /id02_16h5/base_footprint}
+    - {name: april03, path: /id03_16h5/base_footprint}
+    - {name: april04, path: /id04_16h5/base_footprint}
+    - {name: april05, path: /id05_16h5/base_footprint}
+    - {name: april06, path: /id06_16h5/base_footprint}
+    - {name: april07, path: /id07_16h5/base_footprint}
+    - {name: april08, path: /id08_16h5/base_footprint}
+    - {name: april09, path: /id09_16h5/base_footprint}
+    - {name: april10, path: /id10_16h5/base_footprint}
+    - {name: april11, path: /id11_16h5/base_footprint}

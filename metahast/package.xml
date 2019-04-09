@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package>
+  <name>metahast</name>
+  <version>0.0.0</version>
+  <description>The metahast</description>
+  <maintainer email="todo@todo.todo">benjamin</maintainer>
+  <license>BSD</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>hast_gazebo_msgs</run_depend>
+  <run_depend>message_to_tf</run_depend>
+  <run_depend>robot_descriptions</run_depend>
+  <run_depend>robot_plugins</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>

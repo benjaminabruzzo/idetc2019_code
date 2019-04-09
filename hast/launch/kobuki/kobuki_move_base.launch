@@ -1,0 +1,62 @@
+<launch>
+	<arg name="ugv_ns" 				default="ugv1"/>
+	<arg name="dwa_params" 			default="tbrl"/>
+	<arg name="goal_topic" 			default="/goal"/> 
+	<arg name="raw_command_topic" 	default="$(arg ugv_ns)/kobuki/cmd_vel"/> 
+	<arg name="kobuki_odom_topic" 	default="$(arg ugv_ns)/kobuki/odom"/> 
+
+	<node pkg="move_base" type="move_base" respawn="false" name="move_base_$(arg ugv_ns)_$(env HOST)" output="screen">
+		<remap from="goal" 		to="$(arg goal_topic)"/>
+		<remap from="odom" 		to="$(arg kobuki_odom_topic)"/>
+		<remap from="cmd_vel" 	to="$(arg raw_command_topic)"/>
+
+		<rosparam file="$(find hast)/config/kobuki/$(arg ugv_ns)_frames_and_topics.yaml" command="load" />
+		<rosparam file="$(find hast)/config/kobuki/kobuki_costmap_common_params.yaml" 	 command="load" ns="global_costmap" />
+		<rosparam file="$(find hast)/config/kobuki/kobuki_costmap_common_params.yaml" 	 command="load" ns="local_costmap" />
+		<rosparam file="$(find hast)/config/kobuki/kobuki_costmap_global_params.yaml" 	 command="load" />
+		<rosparam file="$(find hast)/config/kobuki/kobuki_costmap_local_params.yaml" 	 command="load" />
+		<rosparam file="$(find hast)/config/kobuki/kobuki_move_base_params.yaml" 		 command="load" />
+		<rosparam file="$(find hast)/config/kobuki/kobuki_navfn_global.yaml"	 		 command="load" />
+		<rosparam file="$(find hast)/config/kobuki/kobuki_dwa_$(arg dwa_params).yaml" 	 command="load" />
+
+		<remap from="/move_base/DWAPlannerROS/cost_cloud"                               to="/$(arg ugv_ns)/move_base/DWAPlannerROS/cost_cloud" />
+		<remap from="/move_base/DWAPlannerROS/global_plan"                              to="/$(arg ugv_ns)/move_base/DWAPlannerROS/global_plan" />
+		<remap from="/move_base/DWAPlannerROS/local_plan"                               to="/$(arg ugv_ns)/move_base/DWAPlannerROS/local_plan" />
+		<remap from="/move_base/DWAPlannerROS/parameter_descriptions"                   to="/$(arg ugv_ns)/move_base/DWAPlannerROS/parameter_descriptions" />
+		<remap from="/move_base/DWAPlannerROS/parameter_updates"                        to="/$(arg ugv_ns)/move_base/DWAPlannerROS/parameter_updates" />
+		<remap from="/move_base/DWAPlannerROS/trajectory_cloud"                         to="/$(arg ugv_ns)/move_base/DWAPlannerROS/trajectory_cloud" />
+		<remap from="/move_base/NavfnROS/plan"                                          to="/$(arg ugv_ns)/move_base/NavfnROS/plan" />
+		<remap from="/move_base/cancel"                                                 to="/$(arg ugv_ns)/move_base/cancel" />
+		<remap from="/move_base/current_goal"                                           to="/$(arg ugv_ns)/move_base/current_goal" />
+		<remap from="/move_base/feedback"                                               to="/$(arg ugv_ns)/move_base/feedback" />
+		<remap from="/move_base/global_costmap/costmap"                                 to="/$(arg ugv_ns)/move_base/global_costmap/costmap" />
+		<remap from="/move_base/global_costmap/costmap_updates"                         to="/$(arg ugv_ns)/move_base/global_costmap/costmap_updates" />
+		<remap from="/move_base/global_costmap/footprint"                               to="/$(arg ugv_ns)/move_base/global_costmap/footprint" />
+		<remap from="/move_base/global_costmap/inflation_layer/parameter_descriptions"  to="/$(arg ugv_ns)/move_base/global_costmap/inflation_layer/parameter_descriptions" />
+		<remap from="/move_base/global_costmap/inflation_layer/parameter_updates"       to="/$(arg ugv_ns)/move_base/global_costmap/inflation_layer/parameter_updates" />
+		<remap from="/move_base/global_costmap/obstacle_layer/clearing_endpoints"       to="/$(arg ugv_ns)/move_base/global_costmap/obstacle_layer/clearing_endpoints" />
+		<remap from="/move_base/global_costmap/obstacle_layer/parameter_descriptions"   to="/$(arg ugv_ns)/move_base/global_costmap/obstacle_layer/parameter_descriptions" />
+		<remap from="/move_base/global_costmap/obstacle_layer/parameter_updates"        to="/$(arg ugv_ns)/move_base/global_costmap/obstacle_layer/parameter_updates" />
+		<remap from="/move_base/global_costmap/parameter_descriptions"                  to="/$(arg ugv_ns)/move_base/global_costmap/parameter_descriptions" />
+		<remap from="/move_base/global_costmap/parameter_updates"                       to="/$(arg ugv_ns)/move_base/global_costmap/parameter_updates" />
+		<remap from="/move_base/global_costmap/static_layer/parameter_descriptions"     to="/$(arg ugv_ns)/move_base/global_costmap/static_layer/parameter_descriptions" />
+		<remap from="/move_base/global_costmap/static_layer/parameter_updates"          to="/$(arg ugv_ns)/move_base/global_costmap/static_layer/parameter_updates" />
+		<remap from="/move_base/goal"                                                   to="/$(arg ugv_ns)/move_base/goal" />
+		<remap from="/move_base/local_costmap/costmap"                                  to="/$(arg ugv_ns)/move_base/local_costmap/costmap" />
+		<remap from="/move_base/local_costmap/costmap_updates"                          to="/$(arg ugv_ns)/move_base/local_costmap/costmap_updates" />
+		<remap from="/move_base/local_costmap/footprint"                                to="/$(arg ugv_ns)/move_base/local_costmap/footprint" />
+		<remap from="/move_base/local_costmap/inflation_layer/parameter_descriptions"   to="/$(arg ugv_ns)/move_base/local_costmap/inflation_layer/parameter_descriptions" />
+		<remap from="/move_base/local_costmap/inflation_layer/parameter_updates"        to="/$(arg ugv_ns)/move_base/local_costmap/inflation_layer/parameter_updates" />
+		<remap from="/move_base/local_costmap/obstacle_layer/clearing_endpoints"        to="/$(arg ugv_ns)/move_base/local_costmap/obstacle_layer/clearing_endpoints" />
+		<remap from="/move_base/local_costmap/obstacle_layer/parameter_descriptions"    to="/$(arg ugv_ns)/move_base/local_costmap/obstacle_layer/parameter_descriptions" />
+		<remap from="/move_base/local_costmap/obstacle_layer/parameter_updates"         to="/$(arg ugv_ns)/move_base/local_costmap/obstacle_layer/parameter_updates" />
+		<remap from="/move_base/local_costmap/parameter_descriptions"                   to="/$(arg ugv_ns)/move_base/local_costmap/parameter_descriptions" />
+		<remap from="/move_base/local_costmap/parameter_updates"                        to="/$(arg ugv_ns)/move_base/local_costmap/parameter_updates" />
+		<remap from="/move_base/parameter_descriptions"                                 to="/$(arg ugv_ns)/move_base/parameter_descriptions" />
+		<remap from="/move_base/parameter_updates"                                      to="/$(arg ugv_ns)/move_base/parameter_updates" />
+		<remap from="/move_base/result"                                                 to="/$(arg ugv_ns)/move_base/result" />
+		<remap from="/move_base/status"                                                 to="/$(arg ugv_ns)/move_base/status" />
+		<remap from="/move_base_simple/goal"                                            to="/$(arg ugv_ns)/move_base_simple/goal" />
+	</node>
+</launch>
+

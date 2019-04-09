@@ -1,0 +1,65 @@
+<launch>
+	<!-- Lazy shutoff -->
+	<arg name="launcher"	default="spawn" />
+
+	<node pkg="hast"		type="killhast"		 output="screen" name="killhast_$(arg launcher)_$(env HOST)"		 required="true"/>
+	<node pkg="hast"		type="shutdownListener" output="screen" name="shutdownListener_$(arg launcher)_$(env HOST)" required="true"/>
+	
+	<arg name="use_sim_time"	default="true"/>
+	<arg name="vicon_date"		default="20180905"/>
+	<arg name="vicon_run"		default="014"/>
+	<arg name="block"   		default="false"/>	
+	<arg name="gui"	 			default="true"/>
+	<arg name="verbose"	 		default="true"/>
+	<arg name="paused"			default="false"/>
+
+	<include file="$(find hast_gazebo)/launch/empty_world.launch">
+		<arg name="world_name" 		value="$(find robot_descriptions)/worlds/empty.world"/>
+		<arg name="gui" 			value="$(arg gui)"/>
+		<arg name="paused" 			value="$(arg paused)"/>
+		<arg name="verbose" 		value="$(arg verbose)"/>
+		<arg name="use_sim_time" 	value="$(arg use_sim_time)"/>
+		<arg name="vicon_date" 		value="$(arg vicon_date)"/>
+		<arg name="vicon_run"	 	value="$(arg vicon_run)"/>
+	</include>
+
+
+	<node pkg="tf" type="static_transform_publisher" name="tf_map2viconorigin" args="0 0 0 0 0 0 /vicon/origin /map 100"/> 
+
+	<group if="$(arg block)">
+	  <!-- stuff that will only be evaluated if foo is true -->
+	  	<include file="$(find robot_descriptions)/common/launch/block_$(arg vicon_date)_$(arg vicon_run).launch" />
+	</group>
+
+	<!-- Spawn UGV(s) -->  
+	<include file="$(find hast_gazebo)/launch/spawn_ugv1.launch" />
+	<!-- <include file="$(find hast_gazebo)/launch/spawn_ugvn.launch" /> -->
+
+	
+	<!-- Spawn UAV --> 
+	<arg name="uav_cmd_vel_topic"	default="/hast/uav/cmd_vel"/>
+	<include file="$(find robot_descriptions)/UAV/launch/UAV_$(arg vicon_date)_$(arg vicon_run).launch" >
+		<arg name="uav_cmd_vel_topic" 	value="$(arg uav_cmd_vel_topic)"/>
+	</include>
+
+
+	<!-- Spawn tags -->
+	<include file="$(find robot_descriptions)/tags/launch/tags_$(arg vicon_date)_$(arg vicon_run).launch" />
+
+
+
+
+</launch>
+
+
+
+<!-- 
+rostopic pub -1 /ardrone/takeoff std_msgs/Empty
+
+rostopic pub -1 /ardrone/land std_msgs/Empty
+
+rostopic pub -1 /ardrone/flattrim std_msgs/Empty
+rostopic pub -1 /ardrone/imu_recalib std_msgs/Empty
+rostopic pub -1 /ardrone/reset std_msgs/Empty
+
+ -->

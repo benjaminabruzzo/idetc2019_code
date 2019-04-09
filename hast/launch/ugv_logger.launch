@@ -1,0 +1,25 @@
+<launch>
+	<arg name="ugv_n" 				default="ugv1" />
+	<arg name="trial" 				default="001" />
+	<arg name="date" 				default="20181207" />
+	<arg name="cmd_vel_x_limit" 	default="0.4" />
+	<arg name="cmd_vel_w_limit" 	default="0.2" />
+	<arg name="cmd_vel_sub_topic" 	default="/$(arg ugv_n)/cmd_vel_raw" />
+	<arg name="cmd_vel_pub_topic" 	default="/$(arg ugv_n)/cmd_vel_limited" />
+	<arg name="local_path_topic" 	default="/move_base_$(arg ugv_n)_$(env HOST)/DWAPlannerROS/local_plan" />
+	<arg name="global_path_topic" 	default="/move_base_$(arg ugv_n)_$(env HOST)/DWAPlannerROS/global_plan" />
+	
+	<node pkg="hast" type="ugv_logger.py" name="$(arg ugv_n)_logger_$(env HOST)"  >
+		<param name="/ugv_n" 			value="$(arg ugv_n)" />
+		<param name="/trial" 			value="$(arg trial)"  	type="str" />
+		<param name="/date" 			value="$(arg date)" 	type="str" />
+		<param name="/cmd_vel_x_limit" 		value="$(arg cmd_vel_x_limit)" />
+		<param name="/cmd_vel_w_limit" 		value="$(arg cmd_vel_w_limit)" />
+		<param name="/cmd_vel_sub_topic" 	value="$(arg cmd_vel_sub_topic)" />
+		<param name="/cmd_vel_pub_topic" 	value="$(arg cmd_vel_pub_topic)" />
+		<param name="/local_path_topic" 	value="$(arg local_path_topic)" />
+		<param name="/global_path_topic" 	value="$(arg global_path_topic)" />
+	</node>
+
+</launch>
+

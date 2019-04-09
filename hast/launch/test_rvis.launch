@@ -1,0 +1,47 @@
+<launch>
+
+	<!-- Bookkeeping nodes -->
+	<arg name="launcher" 	default="rviz_launcher" />
+		<node pkg="hast"		type="killhast"			output="screen"	name="killhast_$(arg launcher)"			required="true"/>
+		<node pkg="hast"		type="shutdownListener"	output="screen" name="shutdownListener_$(arg launcher)"	required="true"/>
+
+	<!-- UGV Description definition -->
+	<arg name="test"   	default="false"/>	
+	<arg name="config" 	default="$(find robot_descriptions)/UGV_n/urdf/hast_ugvn_kobuki_stereo.urdf.xacro"/> 
+
+	<include file="$(find robot_descriptions)/UGV_n/launch/ugvn_description.launch">
+		<arg name="ugv_ns" value="ugv1"/> 
+		<arg name="config" value="$(arg config)"/> 
+		
+		<arg name="test"   value="$(arg test)"/>
+		<!-- only used if test:=true -->
+		<arg name="xyz_init" value="1 -1 0"  /> 
+		<!-- <arg name="x_init" value="1"  />  -->
+		<!-- <arg name="y_init" value="-1" /> -->
+	</include>
+
+	<include file="$(find robot_descriptions)/UGV_n/launch/ugvn_description.launch">
+		<arg name="ugv_ns" value="ugv2"/> 
+		<arg name="config" value="$(arg config)"/> 
+		
+		<arg name="test"   value="$(arg test)"/>
+		<!-- only used if test:=true -->
+		<arg name="xyz_init" value="-1 1 0"  /> 
+		<!-- <arg name="x_init" value="-1"/>  -->
+		<!-- <arg name="y_init" value="1" />  -->
+	</include>
+
+
+
+	<!-- Map and static TF -->
+	<node name="map_server" pkg="map_server" type="map_server" args="$(find hast)/maps/square300x300.yaml"/>
+	
+	<!-- start robot state publisher -->
+
+	<!-- Launch visualization -->
+	<arg name="rvizconfig" 	default="$(find robot_descriptions)/UGV_n/rviz/ugvn.rviz" />
+		<node pkg="rviz" 	 type="rviz" 				name="rviz_$(arg launcher)" 	args="-d $(arg rvizconfig)"/> 
+
+
+</launch>
+

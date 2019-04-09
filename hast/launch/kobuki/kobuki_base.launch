@@ -1,0 +1,41 @@
+<!-- for launching single ugv base controllers in reality -->
+<launch>
+	<arg name="ugv_n"   			default="ugv1" />
+	<arg name="tb_base"   			default="kobuki" />
+	<arg name="launcher" 			default="$(arg tb_base)_launch" />
+	<arg name="raw_wheel_cmd_topic" default="$(arg tb_base)/cmd_vel_raw" />
+	<arg name="ugv_x_limit"   		default="0.15" />
+	<arg name="ugv_w_limit"   		default="0.2" />
+	<arg name="cost_scaling_factor" default="7" />
+
+	<param name="/hast/tb_base" value="kobuki" type = "str" />
+
+	<include file="$(find hast)/launch/kobuki/kobuki_driver.launch">
+		<arg name="ugv_n"				value="$(arg ugv_n)" />
+		<arg name="raw_wheel_cmd_topic" value="$(arg raw_wheel_cmd_topic)" />
+		<arg name="speed_lim_v" 		value="$(arg ugv_x_limit)" />
+		<arg name="speed_lim_w" 		value="$(arg ugv_w_limit)" />
+	</include>
+	<include file="$(find hast)/launch/kobuki/kobuki_pgr.launch"/>
+
+	<node name="map_server" pkg="map_server" type="map_server" args="$(find hast)/maps/square300x300.yaml"/>
+	<node ns="kobuki" pkg="tf" type="static_transform_publisher" name="tf_map2odom" args="0 0 0 0 0 0 /map /hast/kobuki/odom 100"/> 
+
+	<include file="$(find hast)/launch/kobuki/kobuki_move_base.launch">
+		<arg name="ugv_ns"				value="$(arg ugv_n)" />
+		<arg name="dwa_params"			value="tbrl" />
+		<arg name="raw_command_topic"	value="/hast/$(arg raw_wheel_cmd_topic)" />
+	</include>
+
+	<node	pkg="hast" 	type="ugvAction"	name="ugvAction"	output="screen">
+		<param name="ugv_footprint"			value="/$(arg ugv_n)/hast/base_footprint"/>
+		<param name="ugv_goaltopic"			value="/hast/ugv/goal"	/>
+		<param name="s_move_base_namespace"	value="/$(arg ugv_n)/move_base"	/>
+	</node>
+
+	<!-- DOES /HAST/UGV/GOAL NEED TO BE CHANGED TO UGV1? -->
+	<node pkg="rostopic" 	type="rostopic" 		output="screen" name="ugvGoalEcho" 						args="echo /hast/ugv/goal" />
+	<node pkg="hast"		type="killhast"			output="screen"	name="killhast_$(arg launcher)"			required="true"/>
+	<node pkg="hast"		type="shutdownListener"	output="screen" name="shutdownListener_$(arg launcher)"	required="true"/>
+
+</launch>

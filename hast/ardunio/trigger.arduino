@@ -1,0 +1,13 @@
+int sig = 13;
+
+// the setup routine runs once when you press reset:
+void setup() {                
+  // initialize the digital pin as an output.
+  pinMode(sig, OUTPUT);     
+}
+void loop() {
+  digitalWrite(sig, HIGH);  
+  delay(17);               
+  digitalWrite(sig, LOW);   
+  delay(17);            
+}

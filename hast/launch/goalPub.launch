@@ -1,0 +1,14 @@
+<launch>
+	<arg name="goal_x" 	default="3.0" />
+	<arg name="goal_y" 	default="0.5" />
+	<arg name="goal_theta" 	default="0.01" />
+	<arg name="goal_topic" 	default="/hast/ugv/goal" />
+
+	<node pkg="hast"	type="goalPub"	name="goalPub"	output="screen" >
+		<param name="goal_x" 		value="$(arg goal_x)"/>
+		<param name="goal_y" 		value="$(arg goal_y)"/>
+		<param name="goal_theta" 	value="$(arg goal_theta)"/>
+		<param name="goal_topic" 	value="$(arg goal_topic)"/>
+	</node>
+
+</launch>

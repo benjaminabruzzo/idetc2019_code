@@ -1,0 +1,8 @@
+<launch>
+
+	<node 	pkg="hast" 	type="tag_tfrviz_setup.py"	name="tag_tfrviz_setup">
+		<param name="map_topic" 	value="/map" />
+ 	</node>
+
+
+</launch>

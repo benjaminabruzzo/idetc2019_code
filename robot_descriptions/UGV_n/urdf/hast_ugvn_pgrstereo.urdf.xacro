@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <!-- stereo camera -->
+  <!-- <xacro:property name="X_ROBOT_NAMESPACE" value="/gazebo/kobuki" /> -->
+
+  <xacro:macro name="kobuki_pgr" params="X_ROBOT_NAMESPACE X_BASELINE">
+    <xacro:property name="X_PI" value="3.1415926535897931" /> 
+    <!-- <xacro:property name="X_BASELINE" value="0.1524" /> -->
+    <xacro:property name="x_image_width" value="1288" />
+    <xacro:property name="x_image_height" value="964" />
+    <xacro:property name="x_distortionK1" value="0.0" />
+    <xacro:property name="x_distortionK2" value="0.0" />
+    <xacro:property name="x_distortionK3" value="0.0" />
+    <xacro:property name="x_distortionT1" value="0.0" />
+    <xacro:property name="x_distortionT2" value="0.0" />
+    <xacro:property name="x_angularFOV" value="${X_PI * 61.5 / 180}" />
+
+
+    <gazebo reference="${X_ROBOT_NAMESPACE}/stereo_left">
+      <sensor type="multicamera" name="stereo_camera">
+        <update_rate>10.0</update_rate>
+        <camera name="left">
+          <horizontal_fov>${x_angularFOV}</horizontal_fov>
+          <image>
+            <width>${x_image_width}</width>
+            <height>${x_image_height}</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <camera name="right">
+          <pose>0 -${X_BASELINE} 0 0 0 0</pose>
+          <horizontal_fov>${x_angularFOV}</horizontal_fov>
+          <image>
+            <width>${x_image_width}</width>
+            <height>${x_image_height}</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="stereo_camera_controller" filename="libgazebo_ros_multicamera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <robotNamespace>${X_ROBOT_NAMESPACE}/pgrstereo</robotNamespace>
+          <cameraName></cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>left_camera_optical_frame</frameName>
+          <hackBaseline>${X_BASELINE}</hackBaseline>
+          <distortionK1>${x_distortionK1}</distortionK1>
+          <distortionK2>${x_distortionK2}</distortionK2>
+          <distortionK3>${x_distortionK3}</distortionK3>
+          <distortionT1>${x_distortionT1}</distortionT1>
+          <distortionT2>${x_distortionT2}</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+</robot>

@@ -1,0 +1,28 @@
+<launch>
+	<arg name="tag"				default="id07"/>
+	<arg name="tag_model" 		default="$(find robot_descriptions)/tags/urdf/$(arg tag)_16h5.urdf.xacro"/>
+	<arg name="tag_description" default="april_$(arg tag)_description"/>
+	
+	<param name="$(arg tag_description)" command="$(find xacro)/xacro --inorder $(arg tag_model)" />
+
+	<node ns="april" pkg="tf" type="static_transform_publisher" name="$(arg tag)_foot2base" 
+		args="0.0 0.0 0.0 0.0 0.0 0.0 /$(arg tag)_16h5/base_footprint /$(arg tag)_16h5/base_link 1"/>
+	<node ns="april" pkg="tf" type="static_transform_publisher" name="$(arg tag)_base2fill" 
+		args="0.0 0.0 0.001 0.0 0.0 0.0 /$(arg tag)_16h5/base_link /$(arg tag)_16h5/fill_link 1"/>
+
+
+	<node ns="april" pkg="tf" type="static_transform_publisher" name="$(arg tag)_map2foot" 
+		args="0.0 0.0 0.0 0.0 0.0 0.0 /map /$(arg tag)_16h5/base_footprint 1"/>
+
+	 
+
+	<node 	pkg="hast" 	type="tag_tfrviz_setup"	name="tag_tfrviz_setup">
+		<arg name="map_topic" 	value="/map" />
+ 	</node>
+
+
+</launch>
+
+
+
+

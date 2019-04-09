@@ -1,0 +1,31 @@
+I created a file .dae with sketchup of a cube with Textures.
+
+I want to put the cube over a pioneer but when I see the robot in Rviz the cube is transparent.
+
+Should I stop using sketchup to generate the .dae and try some other program? Need some help here.
+add a comment
+1 Answer
+Sort by »
+oldest
+newest
+most voted
+1
+
+answered Feb 25 '15
+End-Effector gravatar image
+End-Effector
+140 ●24 ●26 ●37
+
+I MADE IT!
+
+Only took like 1 and a half day.
+
+To add a object with texture to your robot you should use Sketchup to make the thing you want to put in your robot.
+
+Then you have to export it to .obj NOT .dae.
+
+Then open the .obj file with MESHLAB and save it to .dae. You should try opening the file again with meshlab because it gives some crazy error about not having a notexture.png file. Copy random .png file and call it notexture.png.
+
+Then add your mesh to the .urdf file and the folder with the textures. They should be .png textures.
+
+And its done!

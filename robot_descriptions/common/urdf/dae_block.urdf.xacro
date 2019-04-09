@@ -1,0 +1,32 @@
+<robot name="id07_16h5" xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<xacro:property name="X_PI" value="3.1415926535897931" />
+	<xacro:property name="X_id" value="dae_block" />
+	<link name="${X_id}/base_footprint">
+		<visual>
+			<geometry>
+				<mesh filename="package://robot_descriptions/common/urdf/${X_id}.dae" />
+			</geometry>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="grey"/>
+		</visual>
+		<collision>
+			<geometry>
+				<box size="0.75 0.4 0.4"/>
+			</geometry>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+		</collision>
+		<inertial>
+			<mass value="1"/> <!-- 2.4/2.6 kg for small/big battery pack -->
+			<origin xyz="0 0 0"/>
+			<inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
+		</inertial>
+	</link>
+
+
+	<material name="grey">
+		<color rgba="0.75 0.75 0.75 1"/>
+	</material>
+
+</robot>
+

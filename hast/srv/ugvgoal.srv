@@ -1,0 +1,7 @@
+uint32 tagID 		# id of tag to request goal location
+---
+bool goalInMap		# response to verify goal location is in the map
+vector3 goalP		# position of target in map
+float64 goalYaw 	# yaw of target in map
+
+geometry_msgs/PointStamped goalPoint # position of goal in frame_id (x,y,z)

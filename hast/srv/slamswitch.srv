@@ -1,0 +1,4 @@
+bool flip 					# boolean bit for changing UAV control mode between measuring and guiding from apriltags
+posewithheader pose # global pose of uav at time of slam initiating
+---
+bool flop # service response bit

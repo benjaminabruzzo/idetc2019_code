@@ -1,0 +1,13 @@
+<launch>
+	<arg name="april_goal_id" 	default="7" />
+	<arg name="launcher" 		default="goalPubCli_launch" />
+
+	<node pkg="hast"	type="goalPubCli"	name="goalPubCli"	output="screen" >
+		<param name="april_goal_id" 	value="$(arg april_goal_id)"/>
+	</node>
+
+	<node pkg="hast"	type="shutdownListener"	output="screen" name="shutdownListener_$(arg launcher)"	 required="true"/>
+	<!-- <node pkg="rviz" 	type="rviz" name="rviz_goalCli" output="screen"/> -->  <!-- args="-d $(find ar_pose)/launch/live_multi.rviz"/> -->
+
+
+</launch>

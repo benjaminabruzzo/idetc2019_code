@@ -1,0 +1,28 @@
+<launch>
+	<!-- Actual location of id07 -->
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id07"/> 
+		<arg name="x"	value="-0.3353"/> 
+		<arg name="y"	value="-1.1739"/> 
+		<arg name="z"   value="0.0035"/> 
+		<arg name="Y"	value="-2.1354"/> 
+	</include>
+
+	<!-- Actual location of id06 -->
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id02"/> 
+		<arg name="x"   value="-1.3079"/> 
+		<arg name="y"   value="-1.0081"/> 
+		<arg name="z"   value="0.2290"/> 
+		<arg name="Y"   value="-1.6008"/> 
+	</include>
+
+	<!-- Actual location of id03 -->
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id03"/> 
+		<arg name="x"   value="-1.1425"/> 
+		<arg name="y"   value="-0.2096"/> 
+		<arg name="z"   value="0.2340"/> 
+		<arg name="Y"   value="-1.7343"/> 
+	</include>
+</launch>

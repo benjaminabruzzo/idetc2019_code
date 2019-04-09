@@ -1,0 +1,73 @@
+<launch>
+    <!-- set params -->
+	<arg name="sim" default="true" />
+
+	<arg name="launcher" 	default="hast_launch" />
+	<!-- Experiment parameters and identifiers -->
+	<arg name="april_debug" default="false" />
+	<arg name="run" 		default="000" />
+	<arg name="date" 		default="20160930" />
+	<arg name="user" 		default="$(env USER)" />
+	<arg name="saveimages" 	default="false" />
+	<arg name="tb_base" 	default="kobuki" />
+	<!-- <arg name="sync_namespace" default="sync" /> -->
+
+
+	<!-- Experiment index parameters -->
+	<param name="/hast/run" value="$(arg run)" type = "str" />
+	<param name="/hast/date" value="$(arg date)" type = "str" />
+	<param name="/hast/user" value="$(arg user)" type = "str" />
+	<!-- <param name="/hast/droneSN" value="$(arg droneSN)" type = "str" /> -->
+
+	<param name="/hast/stereo/SaveImages" value="$(arg saveimages)" type = "bool" />
+	<param name="/hast/kf/sim" value="$(arg sim)" type = "bool" />
+	<param name="/hast/april/debug" value="$(arg april_debug)" type = "bool" />
+
+	<rosparam command="load" file="$(find hast)/config/april/april_dictionary.yaml" />
+
+	<group ns="/hast/stereo" >
+		<rosparam file="$(find hast)/cam_info/kobuki_pgr_params.yaml" command="load"/>
+	</group>
+
+
+	<!-- Start hast nodes-->
+	<param name="/hast/kf/sim" value="true" type = "bool" />
+	<!-- <param name="/hast/stereo/SaveImages" value="$(arg SaveImages)" type = "bool" /> -->
+	<!-- <node pkg="hast" type="makedir.sh" name="makeDir"       output="screen" /> -->
+	<!-- <node 	pkg="hast" 	type="stateRec"   	name="stateRecorder" 	output="screen" /> -->
+	<!-- <node 	pkg="hast" 	type="droneCon"   	name="droneController"/> -->
+	<!-- <node 	pkg="hast" 	type="stereoObs" 	name="stereoObs" 	output="screen" /> -->
+	<!-- <node 	pkg="hast" 	type="pubImage" 	name="pubImage" 	output="screen" /> -->
+	<!-- <node 	pkg="hast" 	type="compKF" 	name="compKF" 		output="screen" /> -->
+
+	<!-- <node 	pkg="hast" 	type="oneCKF"	name="oneCKF"	output="screen"	required="true"> -->
+
+    <!-- run bag -->
+    <param name="use_sim_time" value="true" />
+    <arg name="bagpath" default="/home/$(arg user)/ros/data/$(arg date)/$(arg run)" />
+    <param name="/hast/bagpath" value="$(arg bagpath)/rebag_$(arg run).bag/"/>
+    <node pkg="rosbag" type="play" name="rosrebag_replay" args="$(arg bagpath)/rebag_$(arg run).bag --clock" required="true"/>
+
+    <!-- This TF is necessary for the body to camera transform of the UAV -->
+	<node ns="ardrone2" pkg="tf" type="static_transform_publisher" name="tf_uav_base2bottomcam" args="0.125 0 0 1.57079632679 3.14159265359 0 /hast/uav/ardrone_base_link /hast/uav/base_bottomcam 100"/> 
+
+	<!-- <node 	pkg="hast" 	type="oneCKF"	name="oneCKF"	output="screen"	required="true"> -->
+	<node 	pkg="hast" 	type="oneCKF"	name="oneCKF"	required="true" >
+		<param name="ckf_TF_parent" 		value="/map"/>
+		<param name="ckf_TF_child" 			value="/hast/uav/ardrone_base_link"			/>
+		<param name="odom_topic" 			value="/hast/$(arg tb_base)/odom"	/>
+		<param name="footprint_topic" 		value="/hast/$(arg tb_base)/base_footprint"	/>
+		<param name="ugvCmd_topic"			value="/hast/$(arg tb_base)/cmd_vel"/>
+		<!-- <param name="uav_baseframe"		value="ardrone2/base_link"/> -->
+		<param name="uav_baseframe"			value="hast/uav/ardrone_base_link"/>
+		<param name="uav_imu_yawdriftrate"	value="0"/>
+		<param name="tag_max_id"			value="20" type="int"/> <!-- Make sure this matches highest number in tag dictionary -->
+	</node>
+
+</launch>
+
+<!--
+    <arg name="rebagpath" default="/home/$(arg user)/ros/data/$(arg date)/$(arg run)/rebag_$(arg run)" />
+    <param name="/hast/rebagpath" value="/home/$(arg user)/ros/data/$(arg date)/$(arg run)/rebag_$(arg run)"/>
+	<node pkg="rosbag" type="record" name="rosbag_record" args="-O $(arg rebagpath) /ardrone/cmd_vel /ardrone/imu /ardrone/land /ardrone/mag /ardrone/navdata /ardrone/navdata_pwm /ardrone/reset /ardrone/takeoff /clock /hast/shutdown /hast/stereo/pixels /hast/stereo/pose" />
+ -->

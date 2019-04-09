@@ -1,0 +1,41 @@
+<!-- -*- mode: XML -*-  -->
+
+<!-- roslaunch hast offline.launch date:20161123_offline run:=007 user:=benjamin -->
+
+<launch>
+	<!-- Experiment parameters and identifiers -->
+	<arg name="sim" default="true" />
+	<arg name="run" default="007" />
+	<arg name="date" default="20180208" />
+	<arg name="user" default="$(env USER)" />
+	<arg name="saveimages" default="false" />
+	<arg name="useransac" default="false" />
+	<arg name="useWheelOdom" default="false" />
+	<arg name="droneSN" default="B" />
+	<arg name="markerStyle" default="april" />
+	<arg name="numimages" default="256" />
+
+	<!-- Experiment index parameters -->
+	<param name="/hast/run" value="$(arg run)" type = "str" />
+	<param name="/hast/user" value="$(arg user)" type = "str" />
+	<param name="/hast/date" value="$(arg date)" type = "str" />
+	<param name="/hast/droneSN" value="$(arg droneSN)" type = "str" />
+
+	<!-- Switch whether or not to save good and bad images during stereo observation -->
+	<param name="/hast/stereo/SaveImages" value="$(arg saveimages)" type = "bool" />
+	<param name="/hast/stereo/UseRansac" value="$(arg useransac)" type = "bool" />
+	<param name="/hast/useWheelOdom" value="$(arg useWheelOdom)" type = "bool" />
+	<param name="/hast/kf/sim" value="$(arg sim)" type = "bool" />
+	<param name="/hast/stereo/numimages" value="$(arg numimages)" type = "int" />
+
+
+	<!-- Experiment Nodes -->
+	<group ns="/hast/stereo" >
+		<rosparam file="/home/$(arg user)/ros/src/hast/cam_info/kobuki_stereo_params.yaml" command="load"/>
+	</group>
+
+	<node 	pkg="hast" 	type="offlineStereo" 	name="offlineStereo" 	output="screen" >
+		
+	</node>
+
+</launch>

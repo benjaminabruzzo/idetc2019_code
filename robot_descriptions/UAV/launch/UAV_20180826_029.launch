@@ -1,0 +1,16 @@
+<launch>
+	<arg name="map_x"   default="-0.9640"/> 
+	<arg name="map_y"   default="-2.6113"/> 
+	<arg name="map_z"   default="0.0139"/> 
+	<arg name="map_Y"   default="-1.2575"/>
+	<arg name="uav_cmd_vel_topic"	default="/hast/uav/cmd_vel"/>
+ 	<include file="$(find robot_descriptions)/UAV/launch/spawn_ardrone.launch" >
+ 		<arg name="uav_cmd_vel_topic" 	value="$(arg uav_cmd_vel_topic)"/>
+		<arg name="model" value="$(find robot_descriptions)/UAV/urdf/ardrone_sensors.urdf.xacro"/> 
+		<arg name="robot_ns" value="/hast/uav"/> 
+		<arg name="x"	value="$(arg map_x)"/>
+		<arg name="y"	value="$(arg map_y)"/>
+		<arg name="z"   value="$(arg map_z)"/>
+		<arg name="Y"	value="$(arg map_Y)"/>
+	</include> 
+</launch>

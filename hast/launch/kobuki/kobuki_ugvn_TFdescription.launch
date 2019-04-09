@@ -1,0 +1,32 @@
+<launch>
+	<arg name="ugv_ns" 		default="ugv1" />
+	<arg name="ugv_model" 	default="$(find robot_descriptions)/UGV_n/urdf/hast_ugvn_kobuki_stereo.urdf.xacro"/>
+	<param name="UGV1_description" command="$(find xacro)/xacro --inorder $(arg ugv_model) ns_arg:=$(arg ugv_ns)/hast" />
+
+
+	<!-- UGV tf for rviz -->
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="$(arg ugv_ns)_foot2link" 
+		args="0.0 0.0 0.0 0.0 0.0 0.0 /$(arg ugv_ns)/hast/base_footprint $(arg ugv_ns)/hast/base_link 1"/> 
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="$(arg ugv_ns)_link2frame" 
+		args="0.0 0.0 0.148 0.0 0.0 0.0 /$(arg ugv_ns)/hast/base_link $(arg ugv_ns)/hast/frame_link 1"/> 
+
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="$(arg ugv_ns)_link2castor_front" 
+		args="0.115 0.0 0.007 0.0 0.0 0.0 /$(arg ugv_ns)/hast/base_link $(arg ugv_ns)/hast/caster_front_link 1"/> 
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="$(arg ugv_ns)_link2castor_back" 
+		args="-0.135 0.0 0.007 0.0 0.0 0.0 /$(arg ugv_ns)/hast/base_link $(arg ugv_ns)/hast/caster_back_link 1"/> 
+
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="$(arg ugv_ns)_link2wheel_left" 
+		args="0.115 0.0 0.007 0.0 0.0 0.0 /$(arg ugv_ns)/hast/base_link $(arg ugv_ns)/hast/wheel_left_link 1"/> 
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="$(arg ugv_ns)_link2wheel_right" 
+		args="0.115 0.0 0.007 0.0 0.0 0.0 /$(arg ugv_ns)/hast/base_link $(arg ugv_ns)/hast/wheel_right_link 1"/> 
+
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="$(arg ugv_ns)_foot2gyro" 
+		args="0.0 0.0 0.0 0.0 0.0 0.0 /$(arg ugv_ns)/hast/base_footprint $(arg ugv_ns)/hast/gyro_link 1"/> 
+
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="$(arg ugv_ns)_foot2cliff_front" 
+		args="0.0 0.0 0.0 0.0 0.0 0.0 /$(arg ugv_ns)/hast/base_footprint $(arg ugv_ns)/hast/cliff_sensor_front_link 1"/> 
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="$(arg ugv_ns)_foot2cliff_left" 
+		args="0.0 0.0 0.0 0.0 0.0 0.0 /$(arg ugv_ns)/hast/base_footprint $(arg ugv_ns)/hast/cliff_sensor_left_link 1"/> 
+	<node ns="$(arg ugv_ns)" pkg="tf" type="static_transform_publisher" name="$(arg ugv_ns)_foot2cliff_right" 
+		args="0.0 0.0 0.0 0.0 0.0 0.0 /$(arg ugv_ns)/hast/base_footprint $(arg ugv_ns)/hast/cliff_sensor_right_link 1"/> 
+</launch>

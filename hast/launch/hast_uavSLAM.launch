@@ -1,0 +1,59 @@
+<!-- -*- mode: XML -*-  -->
+
+<launch>
+	<arg name="launcher" 		default="hast_uavSLAM" />
+	<arg name="trial" 			default="001" />
+	<arg name="date" 				default="20190305" />
+	<arg name="user" 				default="$(env USER)" />
+
+	<arg name="max_number_of_tags" 		default="20" />
+	<arg name="tag_detection_topic" 	default="/ardrone/tag_detections" />
+	<arg name="uav_navdata_topic" 		default="/ardrone/navdata" />
+	<arg name="uav_slam_state_topic"  default="/hast/uav/slamstate" />
+	<arg name="uav_slam_switch_topic" default="/hast/service/uav/slamswitch" />
+	<arg name="uav_TF_frame" 					default="hast/uav/base_frame"/>
+	<arg name="ref_TF_frame" 					default="/map"/>
+	<arg name="shutdown_topic" 				default="/hast/shutdown" />
+
+	<node 	pkg="hast" 	type="uavSLAM"	name="uavSLAM"	output="screen"	>
+		<param name="date" 		value="$(arg date)" 	type="str"/>
+		<param name="trial" 	value="$(arg trial)" 	type="str"/>
+		<param name="user" 		value="$(arg user)"/>
+
+		<param name="augCovScale" value="0.001"/>
+		<param name="uavQdkScale" value="1.000"/>
+		<param name="uavQwScale"  value="1.000"/>
+		<param name="RkScale" 		value="1.000"/>
+
+		<param name="max_number_of_tags" 		value="$(arg max_number_of_tags)"/>		
+		<param name="tag_detection_topic" 	value="$(arg tag_detection_topic)"/>
+		<param name="uav_navdata_topic" 		value="$(arg uav_navdata_topic)"/>
+		<param name="uav_slam_state_topic"  value="$(arg uav_slam_state_topic)"/>
+		<param name="uav_slam_switch_topic" value="$(arg uav_slam_switch_topic)"/>
+		<param name="uav_TF_frame" 					value="$(arg uav_TF_frame)"/>
+		<param name="ref_TF_frame" 					value="$(arg ref_TF_frame)"/>
+		<param name="shutdown_topic" 				value="$(arg shutdown_topic)"/>
+
+	</node>
+
+	<node pkg="hast"	type="killhast"			name="killhast_$(arg launcher)"			output="screen" required="true"/>
+
+	
+
+</launch>
+
+	<!-- <node 	pkg="hast" 	type="threshImage"	name="threshImage" 		/> -->
+
+	<!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hast)/config/$(arg tb_base)/$(arg tb_base)_rviz.rviz" /> -->
+
+
+	<!-- <node pkg="rosbag" type="record" name="rosbag" args="-O $(arg bagpath) tf /ardrone/cmd_vel /ardrone/imu /ardrone/land /ardrone/mag /ardrone/navdata /ardrone/navdata_pwm /ardrone/reset /ardrone/odom /ardrone/takeoff /clock /vo2/info /vo2/odometry /vo2/pose /mobile_base /tag_detections -e '/hast/(.*)' -e '/move_base/(.*)' "/> -->
+
+	<!-- Stereoscopic Image Processing --> 
+	<!-- <arg name="sync_namespace" default="sync" /> -->
+	<!-- <node ns="$(arg sync_namespace)" pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" output="screen" /> -->
+	<!-- <node ns="$(arg sync_namespace)" pkg="image_view" type="image_view" name="left_image_view" args="image:=/$(arg sync_namespace)/left/image_rect_color" /> -->
+	<!-- <node ns="$(arg sync_namespace)" pkg="image_view" type="image_view" name="right_image_view" args="image:=/$(arg sync_namespace)/right/image_rect_color" /> -->
+	<!-- <node pkg="image_view" type="disparity_view" name="disparity_view" args="image:=/$(arg sync_namespace)/disparity" /> -->
+	<!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(find ar_pose)/launch/live_multi.rviz"/> -->
+

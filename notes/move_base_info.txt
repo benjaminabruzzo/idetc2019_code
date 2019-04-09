@@ -1,0 +1,213 @@
+benjamin@ceres:~/ros/src/metahast$ rosnode info /move_base
+--------------------------------------------------------------------------------
+Node [/move_base]
+Publications: 
+ * /gazebo/kobuki/cmd_vel_raw [geometry_msgs/Twist]
+ * /move_base/DWAPlannerROS/cost_cloud [sensor_msgs/PointCloud2]
+ * /move_base/DWAPlannerROS/global_plan [nav_msgs/Path]
+ * /move_base/DWAPlannerROS/local_plan [nav_msgs/Path]
+ * /move_base/DWAPlannerROS/parameter_descriptions [dynamic_reconfigure/ConfigDescription]
+ * /move_base/DWAPlannerROS/parameter_updates [dynamic_reconfigure/Config]
+ * /move_base/DWAPlannerROS/trajectory_cloud [sensor_msgs/PointCloud2]
+ * /move_base/NavfnROS/plan [nav_msgs/Path]
+ * /move_base/current_goal [geometry_msgs/PoseStamped]
+ * /move_base/feedback [move_base_msgs/MoveBaseActionFeedback]
+ * /move_base/global_costmap/costmap [nav_msgs/OccupancyGrid]
+ * /move_base/global_costmap/costmap_updates [map_msgs/OccupancyGridUpdate]
+ * /move_base/global_costmap/footprint [geometry_msgs/PolygonStamped]
+ * /move_base/global_costmap/inflation_layer/parameter_descriptions [dynamic_reconfigure/ConfigDescription]
+ * /move_base/global_costmap/inflation_layer/parameter_updates [dynamic_reconfigure/Config]
+ * /move_base/global_costmap/obstacle_layer/clearing_endpoints [sensor_msgs/PointCloud]
+ * /move_base/global_costmap/obstacle_layer/parameter_descriptions [dynamic_reconfigure/ConfigDescription]
+ * /move_base/global_costmap/obstacle_layer/parameter_updates [dynamic_reconfigure/Config]
+ * /move_base/global_costmap/parameter_descriptions [dynamic_reconfigure/ConfigDescription]
+ * /move_base/global_costmap/parameter_updates [dynamic_reconfigure/Config]
+ * /move_base/global_costmap/static_layer/parameter_descriptions [dynamic_reconfigure/ConfigDescription]
+ * /move_base/global_costmap/static_layer/parameter_updates [dynamic_reconfigure/Config]
+ * /move_base/goal [move_base_msgs/MoveBaseActionGoal]
+ * /move_base/local_costmap/costmap [nav_msgs/OccupancyGrid]
+ * /move_base/local_costmap/costmap_updates [map_msgs/OccupancyGridUpdate]
+ * /move_base/local_costmap/footprint [geometry_msgs/PolygonStamped]
+ * /move_base/local_costmap/inflation_layer/parameter_descriptions [dynamic_reconfigure/ConfigDescription]
+ * /move_base/local_costmap/inflation_layer/parameter_updates [dynamic_reconfigure/Config]
+ * /move_base/local_costmap/obstacle_layer/clearing_endpoints [sensor_msgs/PointCloud]
+ * /move_base/local_costmap/obstacle_layer/parameter_descriptions [dynamic_reconfigure/ConfigDescription]
+ * /move_base/local_costmap/obstacle_layer/parameter_updates [dynamic_reconfigure/Config]
+ * /move_base/local_costmap/parameter_descriptions [dynamic_reconfigure/ConfigDescription]
+ * /move_base/local_costmap/parameter_updates [dynamic_reconfigure/Config]
+ * /move_base/parameter_descriptions [dynamic_reconfigure/ConfigDescription]
+ * /move_base/parameter_updates [dynamic_reconfigure/Config]
+ * /move_base/result [move_base_msgs/MoveBaseActionResult]
+ * /move_base/status [actionlib_msgs/GoalStatusArray]
+ * /rosout [rosgraph_msgs/Log]
+
+Subscriptions: 
+ * /clock [rosgraph_msgs/Clock]
+ * /hast/april/PointCloud2 [sensor_msgs/PointCloud2]
+ * /hast/goal/PointCloud2 [sensor_msgs/PointCloud2]
+ * /move_base/cancel [actionlib_msgs/GoalID]
+ * /move_base/global_costmap/footprint [geometry_msgs/PolygonStamped]
+ * /move_base/goal [move_base_msgs/MoveBaseActionGoal]
+ * /move_base/local_costmap/footprint [geometry_msgs/PolygonStamped]
+ * /move_base_simple/goal [unknown type]
+ * /odom [unknown type]
+ * /tf [tf2_msgs/TFMessage]
+ * /tf_static [tf2_msgs/TFMessage]
+
+Services: 
+ * /move_base/DWAPlannerROS/set_parameters
+ * /move_base/NavfnROS/make_plan
+ * /move_base/clear_costmaps
+ * /move_base/get_loggers
+ * /move_base/global_costmap/inflation_layer/set_parameters
+ * /move_base/global_costmap/obstacle_layer/set_parameters
+ * /move_base/global_costmap/set_parameters
+ * /move_base/global_costmap/static_layer/set_parameters
+ * /move_base/local_costmap/inflation_layer/set_parameters
+ * /move_base/local_costmap/obstacle_layer/set_parameters
+ * /move_base/local_costmap/set_parameters
+ * /move_base/make_plan
+ * /move_base/set_logger_level
+ * /move_base/set_parameters
+
+
+contacting node http://192.168.1.5:36431/ ...
+Pid: 19408
+Connections:
+ * topic: /rosout
+    * to: /rosout
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /gazebo/kobuki/cmd_vel_raw
+    * to: /gazebo
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /gazebo/kobuki/cmd_vel_raw
+    * to: /hast/kobuki_logger
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /move_base/goal
+    * to: /move_base
+    * direction: outbound
+    * transport: INTRAPROCESS
+ * topic: /move_base/result
+    * to: /ugvAction
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /move_base/feedback
+    * to: /ugvAction
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /move_base/status
+    * to: /ugvAction
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /clock
+    * to: /gazebo (http://192.168.1.5:41305/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /tf_uav_base2bottomcam (http://192.168.1.5:34089/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /uav_state_publisher (http://192.168.1.5:44265/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /ardrone_to_tf (http://192.168.1.5:34271/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /kobuki/tf_map2gazebo (http://192.168.1.5:33915/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /ugv_state_publisher (http://192.168.1.5:46301/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /kobuki/tf_map2odom (http://192.168.1.5:39489/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /apriltag_detector (http://192.168.1.5:44919/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /tf_map_2_id03 (http://192.168.1.5:41661/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /id07_state_publisher (http://192.168.1.5:45635/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /tf_map_2_id02 (http://192.168.1.5:41233/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /tf_map_2_id07 (http://192.168.1.5:46697/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /id03_state_publisher (http://192.168.1.5:39321/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /id02_state_publisher (http://192.168.1.5:40365/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /gazebo (http://192.168.1.5:41305/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /oneCKF (http://192.168.1.5:32971/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /stereoObs (http://192.168.1.5:38911/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf_static
+    * to: /uav_state_publisher (http://192.168.1.5:44265/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf_static
+    * to: /ugv_state_publisher (http://192.168.1.5:46301/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf_static
+    * to: /id07_state_publisher (http://192.168.1.5:45635/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf_static
+    * to: /id03_state_publisher (http://192.168.1.5:39321/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /tf_static
+    * to: /id02_state_publisher (http://192.168.1.5:40365/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /hast/april/PointCloud2
+    * to: /oneCKF (http://192.168.1.5:32971/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /hast/goal/PointCloud2
+    * to: /oneCKF (http://192.168.1.5:32971/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /move_base/goal
+    * to: /move_base (http://192.168.1.5:36431/)
+    * direction: inbound
+    * transport: INTRAPROCESS
+ * topic: /move_base/goal
+    * to: /ugvAction (http://192.168.1.5:35721/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /move_base/cancel
+    * to: /ugvAction (http://192.168.1.5:35721/)
+    * direction: inbound
+    * transport: TCPROS
+

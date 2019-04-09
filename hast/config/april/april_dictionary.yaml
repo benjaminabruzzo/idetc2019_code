@@ -1,0 +1,13 @@
+tag_descriptions:
+    - {id: 0,  size: 0.1520, frame_id: april_marker_0}
+    - {id: 1,  size: 0.1520, frame_id: april_marker_1} 
+    - {id: 2,  size: 0.1520, frame_id: april_marker_2} 
+    - {id: 3,  size: 0.1520, frame_id: april_marker_3}
+    - {id: 4,  size: 0.1520, frame_id: april_marker_4} 
+    - {id: 5,  size: 0.1520, frame_id: april_marker_5}
+    - {id: 6,  size: 0.1520, frame_id: april_marker_6}
+    - {id: 7,  size: 0.1520, frame_id: april_marker_7}
+    - {id: 8,  size: 0.1520, frame_id: april_marker_8}
+    - {id: 9,  size: 0.1520, frame_id: april_marker_9}
+    - {id: 10, size: 0.1520, frame_id: april_marker_10}
+    - {id: 11, size: 0.1520, frame_id: april_marker_11}

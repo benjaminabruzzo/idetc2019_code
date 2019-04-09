@@ -1,0 +1,31 @@
+# Call using: 
+# rosrun dynamic_reconfigure dynparam load /left/camera/left_nodelet $HOME/ros/src/hast/cam_info/pgr.yaml
+# rosrun dynamic_reconfigure dynparam load /right/camera/right_nodelet $HOME/ros/src/hast/cam_info/pgr.yaml
+
+# brightness: 2
+
+auto_white_balance: false
+white_balance_blue: 1000
+white_balance_red: 400
+enable_trigger: true
+trigger_mode: mode14
+# trigger_delay: 
+# trigger_parameter: 
+# trigger_polarity: 
+# trigger_source: 
+auto_gain: false
+gain: 8.375
+# gamma: 
+auto_exposure: false
+exposure: 0.5
+auto_shutter: false
+shutter_speed: .002 # seconds
+# auto_brightness: 3
+# auto_gamma: 3
+# auto_hue: 3
+# auto_saturation: 3
+# auto_sharpness: 3
+# auto_white_balance: 3
+# auto_iris: 3
+# auto_focus: 3
+# auto_zoom: 3

@@ -1,0 +1,7 @@
+<launch>
+	<arg name="run" 		default="001" />
+	<arg name="date" 		default="20171206" />
+
+	<node name="zip_source" pkg="hast" type="zipper.sh" args="$(arg date) $(arg run)"/>
+
+</launch>

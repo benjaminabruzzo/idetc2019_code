@@ -1,0 +1,62 @@
+<!-- -*- mode: XML -*-  -->
+<launch>
+	<arg name="launcher" 	default="hast_launch" />
+    <node pkg="hast"        type="killhast"         output="screen" name="killhast_$(arg launcher)"         required="true"/>
+    <node pkg="hast"        type="shutdownListener" output="screen" name="shutdownListener_$(arg launcher)" required="true"/>
+
+	<!-- rviz params -->
+		<arg name="uav_model" 	default="$(find robot_descriptions)/UAV/urdf/ardrone_rviz.urdf.xacro"/> 
+	    <param name="UAV_description" command="$(find xacro)/xacro --inorder $(arg uav_model)" />
+
+		<arg name="rvizconfig" 	default="$(find hast_gazebo)/config/gazebo_kobuki_uav_tags.rviz" />
+		<arg name="ugv1model" 	default="$(find robot_descriptions)/UGV2/urdf/hast_ugv2_kobuki_stereo.urdf.xacro"/>
+	    <param name="UGV_description" command="$(find xacro)/xacro --inorder $(arg ugv1model)" />
+		
+		<include file="$(find hast_gazebo)/launch/rviz_tags.launch"/>
+
+	    <include file="$(find hast_gazebo)/launch/rviz.launch">
+			<arg name="rvizconfig" 	value="$(arg rvizconfig)" />
+	    </include>
+
+	<!-- Experiment parameters and identifiers -->
+		<arg name="sim" 				default="false" />
+		<arg name="april_debug" 		default="false" />
+		<arg name="run" 				default="000" />
+		<arg name="date" 				default="20160930" />
+		<arg name="user" 				default="$(env USER)" />
+		<arg name="saveimages" 			default="false" />
+		<arg name="showcircles" 		default="false" />
+		<arg name="saveraw" 			default="false" />
+		<arg name="trigger_saveraw"		default="false" />  <!-- rosrun hast triggerSaveRaw -->
+		<arg name="tb_base" 			default="kobuki" />
+		<arg name="down_image"  		default="image_rect" />
+		<!-- <arg name="tf_x_offset" 		default="0.025" /> -->
+		<arg name="record_pid" 			default="false" />
+		<arg name="useBackstepping" 	default="false" />
+		<arg name="gazebo_sim" 			default="false"/>
+		<arg name="color_param_file"  	default="$(find hast)/config/stereo_gazebo_params.yaml" />	
+
+
+	<arg name="tf_x_offset" default="0"/>
+	<include file="$(find hast)/launch/hast.launch">
+		<arg name="launcher" 			value="$(arg launcher)" />
+		<arg name="sim" 				value="$(arg sim)" />
+		<arg name="april_debug" 		value="$(arg april_debug)" />
+		<arg name="run" 				value="$(arg run)" />
+		<arg name="date" 				value="$(arg date)" />
+		<arg name="user" 				value="$(arg user)" />
+		<arg name="saveimages" 			value="$(arg saveimages)" />
+		<arg name="showcircles" 		value="$(arg showcircles)" />
+		<arg name="saveraw" 			value="$(arg saveraw)" />
+		<arg name="trigger_saveraw"		value="$(arg trigger_saveraw)" />
+		<arg name="tb_base" 			value="$(arg tb_base)" />
+		<arg name="down_image"  		value="$(arg down_image)" />
+		<arg name="tf_x_offset" 		value="$(arg tf_x_offset)" />
+		<arg name="record_pid" 			value="$(arg record_pid)" />
+		<arg name="useBackstepping" 	value="$(arg useBackstepping)" />
+		<arg name="gazebo_sim" 			value="$(arg gazebo_sim)" />
+		<arg name="color_param_file"  	value="$(arg color_param_file)" />
+	</include>
+
+</launch>
+

@@ -1,0 +1,23 @@
+<launch>
+
+
+	<node pkg="master_discovery_fkie" type="master_discovery"	name="master_discovery"		 required="true" output="screen"/>
+	<node pkg="master_sync_fkie" type="master_sync" name="master_sync" required="true" output="screen"/>
+
+	<arg name="manage"   		default="false"/>	
+	<group if="$(arg manage)">
+	  <!-- stuff that will only be evaluated if foo is true -->
+	  	<node pkg="node_manager_fkie" type="node_manager" name="node_manager" required="true" output="screen"/>
+	</group>
+
+
+	<arg name="launcher" 	default="multi_launch" />
+    <node pkg="hast"        type="killhast"         output="screen" name="killhast_$(arg launcher)_$(env HOST)"         required="true"/>
+    <node pkg="hast"        type="shutdownListener" output="screen" name="shutdownListener_$(arg launcher)_$(env HOST)"         required="true"/>
+
+</launch>
+
+
+<!-- roslaunch hast_multi node_manager.launch manage:=true -->
+
+

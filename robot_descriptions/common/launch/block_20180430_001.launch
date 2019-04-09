@@ -1,0 +1,18 @@
+<launch>
+	<include file="$(find robot_descriptions)/common/launch/spawn_block.launch" >
+		<arg name="tag" value="grey_block"/> 
+		<arg name="x"   value="-0.0187"/> 
+		<arg name="y"   value="-0.0109"/> 
+		<arg name="z"   value="0.2"/> 
+		<arg name="Y"   value="0.7"/> 
+	</include>
+</launch>
+
+
+<!-- 
+P:
+-0.0187
+-0.0109
+0.4165
+
+ -->

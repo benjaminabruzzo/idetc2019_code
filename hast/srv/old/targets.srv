@@ -1,0 +1,17 @@
+bool req
+---
+float64 rBlueX
+float64 rBlueY
+float64 lBlueX
+float64 lBlueY
+float64 rGreenX
+float64 rGreenY
+float64 lGreenX
+float64 lGreenY
+float64 rRedX
+float64 rRedY
+float64 lRedX
+float64 lRedY
+float64 grabtime
+bool flag
+

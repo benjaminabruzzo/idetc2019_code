@@ -1,0 +1,40 @@
+<launch>
+	<!-- set params -->
+	<arg name="run" 		default="003" />
+	<arg name="date" 		default="20180212" />
+	<arg name="user" 		default="$(env USER)" />
+	<arg name="launcher" 	default="rosbagPlay_launch" />
+
+	<param name="/hast/run" value="$(arg run)" type = "str" />
+	<param name="/hast/date" value="$(arg date)" type = "str" />
+	<param name="/hast/user" value="$(env USER)" type = "str" />
+	<param name="/hast/kf/sim" value="true" type = "bool" />
+	<param name="/hast/stereo/SaveImages" value="false" type = "bool" />
+
+	<!-- run bag -->
+	<param name="use_sim_time" value="true" />
+	<arg name="bagpath" default="/home/$(arg user)/ros/data/$(arg date)/$(arg run)" />
+	<param name="/hast/bagpath" value="$(arg bagpath)/bag_$(arg run).bag/"/>
+	<node pkg="rosbag" type="play" name="rosbag_play" args="$(arg bagpath)/bag_$(arg run).bag --clock" required="true"/>
+
+<!-- rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.111 right:=/pgrstereo/right/image_raw left:=/pgrstereo/left/image_raw right_camera:=/pgrstereo/right left_camera:=/pgrstereo/left --approximate=0.005 -->
+
+	<node pkg="rostopic" type="rostopic" 	name="cmd_velEcho" 		output="screen" 	args="echo /hast/kobuki/cmd_vel" />
+	<node pkg="hast"		type="killhast"			output="screen"	name="killhast_$(arg launcher)"			required="true"/>
+	<node pkg="hast"		type="shutdownListener"	output="screen" name="shutdownListener_$(arg launcher)"	required="true"/>
+
+
+</launch>
+
+
+
+<!--
+ * /hast/kobuki/cmd_vel [geometry_msgs/Twist]
+ * /ardrone/navdata [unknown type]
+ * /tf [tf2_msgs/TFMessage]
+ * /tf_static [unknown type]
+ * /hast/shutdown [hast/flag]
+ * /ardrone/cmd_vel [geometry_msgs/Twist]
+ * /kobuki/odom [unknown type]
+ * /hast/stereo/pose [hast/uavstate]
+-->

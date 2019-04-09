@@ -1,0 +1,36 @@
+<launch>
+    <!-- set params -->
+	<arg name="SaveImages" default="false" />
+	<arg name="sim" default="true" />
+	<arg name="run" default="000" />
+	<arg name="date" default="20160105" />
+	<arg name="droneSN" default="B" />
+	<arg name="user" default="$(env USER)" />
+
+	<!-- Experiment index parameters -->
+	<param name="/hast/run" value="$(arg run)" type = "str" />
+	<param name="/hast/date" value="$(arg date)" type = "str" />
+	<param name="/hast/user" value="$(arg user)" type = "str" />
+	<param name="/hast/droneSN" value="$(arg droneSN)" type = "str" />
+
+	<group ns="/hast/stereo" >
+		<rosparam file="$(find hast)/cam_info/kobuki_pgr_params.yaml" command="load"/>
+	</group>
+
+	<!-- Start hast nodes-->
+		<param name="/hast/kf/sim" value="true" type = "bool" />
+		<node 	pkg="hast" 	type="compKF" 	name="compKF" 		output="screen" 	required="true"/>
+
+  <!-- run bag -->
+    <param name="use_sim_time" value="true" />
+    <arg name="bagpath" default="/home/$(arg user)/ros/data/$(arg date)/$(arg run)" />
+    <param name="/hast/bagpath" value="$(arg bagpath)/rebag_$(arg run).bag/"/>
+		<node pkg="rosbag" type="play" name="rosrebag_replay" args="--clock -r 0.5 $(arg bagpath)/rebag_$(arg run).bag "/>
+
+</launch>
+
+<!--
+    <arg name="rebagpath" default="/home/$(arg user)/ros/data/$(arg date)/$(arg run)/rebag_$(arg run)" />
+    <param name="/hast/rebagpath" value="/home/$(arg user)/ros/data/$(arg date)/$(arg run)/rebag_$(arg run)"/>
+	<node pkg="rosbag" type="record" name="rosbag_record" args="-O $(arg rebagpath) /ardrone/cmd_vel /ardrone/imu /ardrone/land /ardrone/mag /ardrone/navdata /ardrone/navdata_pwm /ardrone/reset /ardrone/takeoff /clock /hast/shutdown /hast/stereo/pixels /hast/stereo/pose" />
+ -->

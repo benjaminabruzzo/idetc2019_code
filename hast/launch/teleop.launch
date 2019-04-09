@@ -1,0 +1,36 @@
+<launch>
+	<!-- <include file="$(find hast)/launch/turtlebot_minimal.launch"/> -->
+
+	<!-- <include file="$(find hast)/launch/create_driver.launch"/> -->
+	<arg name="tb_base" 	default="kobuki" />
+	<arg name="mode" 		default="hast" />
+	<!-- <param name="/hast/PLATFORM" value="$(arg PLATFORM)" type = "str" /> -->
+
+	<!-- -->
+
+	<node pkg="turtlebot_teleop" type="turtlebot_teleop_key" name="turtlebot_teleop_keyboard"  output="screen">
+		<param name="scale_linear" value="0.5" type="double"/>
+		<param name="scale_angular" value="0.75" type="double"/>
+		<remap from="turtlebot_teleop_keyboard/cmd_vel" to="/$(arg mode)/$(arg tb_base)/cmd_vel_raw"/>
+		<!-- <remap from="turtlebot_teleop_keyboard/cmd_vel" to="/gazebo/kobuki/commands/velocity"/> -->
+	</node>
+
+	<arg name="launcher" 	default="teleop_launcher" />
+	<node pkg="hast"	type="shutdownListener"	name="shutdownListener_$(arg launcher)"	output="screen"	required="true"/>
+
+</launch>
+
+
+
+
+
+<!-- 
+rostopic pub -1 /hast/kobuki/commands/reset_odometry std_msgs/Empty 
+-->
+
+
+
+
+
+
+

@@ -1,0 +1,6 @@
+bool flip 		# boolean switch for control vs hover
+#bool picket 	# boolean switch for PV control vs UGV offset
+vector3 xyz		# commanded relative position from ugv (usually constant)
+float64 yaw 	# commanded relative yaw of uav from ugv (usually zero)
+---
+bool onoff		# dummy response to verify command set

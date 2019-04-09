@@ -1,0 +1,12 @@
+red_u_high: 125
+red_v_high: 255
+red_u_low: 0
+red_v_low: 140
+blue_u_high: 255
+blue_v_high: 125
+blue_u_low: 140
+blue_v_low: 0
+green_u_high: 125
+green_v_high: 100
+green_u_low: 0
+green_v_low: 10
